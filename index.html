@@ -6,14 +6,36 @@
         font-family: "Helvetica Neue", sans-serif;
         margin: 0;
       }
+      div.tooltip { 
+          position: absolute;     
+          text-align: center;     
+          width: 80px;          
+          height: 14px;         
+          padding: 2px;       
+          font: 12px sans-serif;    
+          background: #fff; 
+          border: 0px;        
+          pointer-events: none;     
+      }
+      #navbar{
+        width: 100vw;
+        height: 40px;
+        background: red;
+      }
     </style>
+
   </head>
   <body>
+    <div id="navbar">
+
+    </div>
+    <div id="map"></div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
     <script>
-      var width = window.innerWidth,
-        height = window.innerHeight;
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      var width = window.innerWidth * (isMobile ? 1 : 0.6);
+      var height = window.innerHeight * (isMobile ? 0.6 : 1);;
 
       var projection = d3.geoMercator();
 
@@ -23,19 +45,22 @@
         .pointRadius(2);
 
       var svg = d3
-        .select("body")
+        .select("#map")
         .append("svg")
         .attr("width", width)
         .attr("height", height);
 
       var g = svg.append("g");
 
-      d3.json("finsl.json", function(error, data) {
+      var tooltip = d3.select("#map").append("div") 
+        .attr("class", "tooltip")       
+        .style("opacity", 0);
+
+      d3.json("finsl.json", async (error, data) =>  {
         var boundary = centerZoom(data);
         var subunits = drawSubUnits(data);
-        colorSubunits(subunits);
-        drawSubUnitLabels(data);
-        drawPlaces(data);
+        await colorSubunits(subunits);
+        // drawSubUnitLabels(data);
         drawOuterBoundary(data, boundary);
       });
 
@@ -47,8 +72,8 @@
         projection.scale(1).translate([0, 0]);
 
         var b = path.bounds(o),
-          s = 1 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
-          t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+          s = 1 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height*1.1),
+          t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) * 0.5];
 
         var p = projection.scale(s).translate(t);
 
@@ -64,30 +89,6 @@
           .attr("stroke", "#3a403d");
       }
 
-      function drawPlaces(data) {
-        g.append("path")
-          .datum(topojson.feature(data, data.objects.places))
-          .attr("d", path)
-          .attr("class", "place");
-
-        g.selectAll(".place-label")
-          .data(topojson.feature(data, data.objects.places).features)
-          .enter()
-          .append("text")
-          .attr("class", "place-label")
-          .attr("transform", function(d) {
-            return "translate(" + projection(d.geometry.coordinates) + ")";
-          })
-          .attr("dy", ".35em")
-          .attr("x", 6)
-          .attr("text-anchor", "start")
-          .style("font-size", ".7em")
-          .style("text-shadow", "0px 0px 2px #fff")
-          .text(function(d) {
-            return d.properties.name;
-          });
-      }
-
       function drawSubUnits(data) {
         var subunits = g
           .selectAll(".subunit")
@@ -97,7 +98,21 @@
           .attr("class", "subunit")
           .attr("d", path)
           .style("stroke", "#fff")
-          .style("stroke-width", "1px");
+          .style("stroke-width", "1px")
+          // .on("mouseover", function(d) {    
+          //   tooltip.transition()    
+          //   .duration(200)    
+          //   .style("opacity", .9);    
+          //   tooltip.html(d.properties.st_nm)  
+          //   .style("left", (d3.event.pageX) + "px")   
+          //   .style("top", (d3.event.pageY - 28) + "px");  
+          // })          
+          // .on("mouseout", function(d) {   
+          //   tooltip.transition()    
+          //   .duration(500)    
+          //   .style("opacity", 0); 
+          // });
+
 
         return subunits;
       }
@@ -121,7 +136,9 @@
           });
       }
 
-      function colorSubunits(subunits) {
+      const colorSubunits = async (subunits) => {
+        const apiResponse = await fetch("https://api.rootnet.in/covid19-in/stats/latest");
+        console.log(apiResponse);
         var c = d3.scaleOrdinal(d3.schemeCategory20);
         subunits
           .style("fill", function(d, i) {
