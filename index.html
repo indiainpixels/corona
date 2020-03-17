@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-49711524-10"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-49711524-10");
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       href="https://fonts.googleapis.com/css2?family=Lato&display=swap:400,900"
@@ -115,23 +130,31 @@
         font-weight: 900;
         font-size: 3em;
       }
-      #right{
+      #right {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        margin:40px 20px;
+        margin: 40px 20px;
       }
       #global {
-        background: #9D50BB;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to bottom, #6E48AA, #9D50BB);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to bottom, #6E48AA, #9D50BB); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-padding:20px;
-display: flex;
-justify-content: space-between;
-border-radius: 10px;
-margin-bottom: 20px;
-color:white;
-font-size:2em;
+        background: #9d50bb; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to bottom,
+          #6e48aa,
+          #9d50bb
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to bottom,
+          #6e48aa,
+          #9d50bb
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        color: white;
+        font-size: 2em;
       }
 
       #total_cases {
@@ -172,11 +195,11 @@ font-size:2em;
           padding: 10px;
           font-size: 14px;
         }
-        #global{
+        #global {
           font-size: 1.2em;
         }
-        #right{
-          margin:0;
+        #right {
+          margin: 0;
         }
       }
     </style>
@@ -227,26 +250,23 @@ font-size:2em;
     <div id="right">
       <div id="global">
         <div>
-        <div style="font-size: 14px">
-          Global Cases
+          <div style="font-size: 14px">
+            Global Cases
+          </div>
+          <div id="global_cases"></div>
         </div>
-        <div id="global_cases">
+        <div>
+          <div style="font-size: 14px">
+            Global Deaths
+          </div>
+          <div id="global_deaths"></div>
         </div>
-      </div>
-      <div>
-        <div style="font-size: 14px">
-          Global Deaths
+        <div>
+          <div style="font-size: 14px">
+            Global Recoveries
+          </div>
+          <div id="global_recoveries"></div>
         </div>
-        <div id="global_deaths">
-        </div>
-      </div>
-      <div>
-        <div style="font-size: 14px">
-          Global Recoveries
-        </div>
-        <div id="global_recoveries">
-        </div>
-      </div>
       </div>
       <div id="table"></div>
     </div>
