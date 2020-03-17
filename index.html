@@ -1,41 +1,270 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato&display=swap:400,900"
+      rel="stylesheet"
+    />
     <style>
       body {
-        font-family: "Helvetica Neue", sans-serif;
+        font-family: "Lato", sans-serif;
         margin: 0;
+        display: flex;
+        background: #4d2d75;
       }
-      div.tooltip { 
-          position: absolute;     
-          text-align: center;     
-          width: 80px;          
-          height: 14px;         
-          padding: 2px;       
-          font: 12px sans-serif;    
-          background: #fff; 
-          border: 0px;        
-          pointer-events: none;     
+
+      path.subunit:hover {
+        fill-opacity: 0.8;
       }
-      #navbar{
+
+      div.tooltip {
+        position: absolute;
+        padding: 5px 10px;
+        color: black;
+        border-radius: 4px;
+        font: 12px sans-serif;
+        background: white;
+        border: 1px solid black;
+        pointer-events: none;
+        min-width: 150px;
+      }
+
+      #navbar {
         width: 100vw;
         height: 40px;
         background: red;
       }
+
+      .state_label {
+        font-size: 16px;
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .cases_label {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px;
+        font-size: 14px;
+      }
+
+      .cases_label > .vali {
+        font-weight: bold;
+      }
+
+      #metrics {
+        width: 250px;
+        background: #9d50bb;
+        /* fallback for old browsers */
+        background: -webkit-linear-gradient(to bottom, #6e48aa, #9d50bb);
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to bottom, #6e48aa, #9d50bb);
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        color: white;
+        display: flex;
+        flex-direction: center;
+        align-items: center;
+        flex-direction: column;
+        padding-top: 80px;
+      }
+
+      a {
+        color: white;
+      }
+
+      #table {
+        flex: 1;
+        background: #9d50bb; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to bottom,
+          #6e48aa,
+          #9d50bb
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to bottom,
+          #6e48aa,
+          #9d50bb
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .myTable {
+        margin-top: 80px !important;
+      }
+
+      #metrics > div {
+        text-align: center;
+        flex: 1;
+      }
+
+      .tcases > .heading {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .tcases > .heading2 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .tcases > .va {
+        font-weight: 900;
+        font-size: 3em;
+      }
+      #right{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin:40px 20px;
+      }
+      #global {
+        background: #9D50BB;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to bottom, #6E48AA, #9D50BB);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to bottom, #6E48AA, #9D50BB); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+padding:20px;
+display: flex;
+justify-content: space-between;
+border-radius: 10px;
+margin-bottom: 20px;
+color:white;
+font-size:2em;
+      }
+
+      #total_cases {
+        font-weight: 900;
+        font-size: 3.2em;
+      }
+
+      .dataTables_info {
+        display: none;
+      }
+      table.dataTable.no-footer {
+        border-bottom: 1px solid transparent !important;
+      }
+
+      table.dataTable thead th,
+      table.dataTable thead td {
+        border-bottom: 1px solid white !important;
+      }
+      th {
+        color: white;
+      }
+
+      table.dataTable tbody tr {
+        background-color: transparent !important;
+        color: white;
+      }
+
+      @media only screen and (max-device-width: 480px) {
+        body {
+          flex-direction: column;
+        }
+        #metrics {
+          width: 100vw;
+          height: 100vh;
+          padding-top: 20px;
+        }
+        #table {
+          padding: 10px;
+          font-size: 14px;
+        }
+        #global{
+          font-size: 1.2em;
+        }
+        #right{
+          margin:0;
+        }
+      }
     </style>
-
+    <link
+      href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <div id="navbar">
 
+  <body>
+    <div id="metrics">
+      <div class="topbanner">
+        <div style="font-size: 28px; font-weight: 900;">Go Corona Go!</div>
+        <i style="font-size: 14px">Last updated on <span id="lastup"></span></i>
+      </div>
+      <div class="tcases">
+        <div class="heading">Total Cases</div>
+        <div id="total_cases"></div>
+      </div>
+      <div class="tcases">
+        <div class="heading2">Indians</div>
+        <div class="va" id="indian_cases"></div>
+      </div>
+      <div class="tcases">
+        <div class="heading2">Foreigners</div>
+        <div class="va" id="foreign_cases"></div>
+      </div>
+      <div class="tcases">
+        <div class="heading2">Deaths</div>
+        <div class="va" id="death_cases"></div>
+      </div>
+      <div class="tcases">
+        <div class="heading2">Recoveries</div>
+        <div class="va" id="cure_cases"></div>
+      </div>
+      <div class="botbanner">
+        <div style="font-size: 14px">
+          Data:
+          <a href="https://www.mohfw.gov.in/">Ministry of Health and Welfare</a>
+        </div>
+        <div style="font-size: 14px">
+          Created by
+          <a href="https://youtube.com/indiainpixels">India in Pixels</a>
+        </div>
+      </div>
     </div>
     <div id="map"></div>
+    <div id="right">
+      <div id="global">
+        <div>
+        <div style="font-size: 14px">
+          Global Cases
+        </div>
+        <div id="global_cases">
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 14px">
+          Global Deaths
+        </div>
+        <div id="global_deaths">
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 14px">
+          Global Recoveries
+        </div>
+        <div id="global_recoveries">
+        </div>
+      </div>
+      </div>
+      <div id="table"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
     <script>
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      var width = window.innerWidth * (isMobile ? 1 : 0.6);
-      var height = window.innerHeight * (isMobile ? 0.6 : 1);;
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+      var width = window.innerWidth * (isMobile ? 1 : 0.5);
+      var height = window.innerHeight * (isMobile ? 0.6 : 1);
 
       var projection = d3.geoMercator();
 
@@ -52,17 +281,110 @@
 
       var g = svg.append("g");
 
-      var tooltip = d3.select("#map").append("div") 
-        .attr("class", "tooltip")       
+      var tooltip = d3
+        .select("#map")
+        .append("div")
+        .attr("class", "tooltip")
         .style("opacity", 0);
 
-      d3.json("finsl.json", async (error, data) =>  {
-        var boundary = centerZoom(data);
-        var subunits = drawSubUnits(data);
-        await colorSubunits(subunits);
-        // drawSubUnitLabels(data);
-        drawOuterBoundary(data, boundary);
-      });
+      function drawMap(dna) {
+        d3.json("finsl.json", function(error, data) {
+          var boundary = centerZoom(data);
+          var subunits = drawSubUnits(data);
+          colorSubunits(subunits, dna);
+          // drawSubUnitLabels(data);
+          // drawOuterBoundary(data, boundary);
+        });
+      }
+
+      drawMap();
+      casesByState = {};
+      $.get(
+        "https://cors-anywhere.herokuapp.com/https://api.rootnet.in/covid19-in/stats/latest",
+        async apiResp => {
+          const global = await fetch("https://corona.lmao.ninja/all");
+          const result = await global.json();
+          $("#global_cases").html(result.cases);
+          $("#global_deaths").html(result.deaths);
+          $("#global_recoveries").html(result.recovered);
+
+          const {
+            total,
+            discharged,
+            deaths,
+            confirmedCasesForeign,
+            confirmedCasesIndian
+          } = apiResp.data.summary;
+          $("#total_cases").html(total);
+          $("#indian_cases").html(confirmedCasesIndian);
+          $("#foreign_cases").html(confirmedCasesForeign);
+          $("#death_cases").html(deaths);
+          $("#cure_cases").html(discharged);
+          $("#lastup").html(
+            moment(apiResp.lastOriginUpdate).format("DD MMMM, YYYY")
+          );
+          let tbl = `<h2 style="color:white;">Indian States Stats</h2><table class="myTable">
+                      <thead>
+                     <tr>
+                      <th>State</td>
+                      <th>Cases</td>
+                      <th>Deaths</td>
+                      <th>Cured</td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      `;
+
+          apiResp.data.regional.forEach(st => {
+            const {
+              confirmedCasesForeign: f,
+              confirmedCasesIndian: i,
+              discharged: d,
+              deaths: r,
+              loc
+            } = st;
+            casesByState[loc] = [i, f, r, d];
+            console.log(i, f, r, d);
+            tbl += `<tr><td>${loc.replace(
+              "Union Territory of ",
+              ""
+            )}</td><td>${i + f}</td><td>${r}</td><td>${d}</td></tr>`;
+          });
+          tbl += "</tbody></table>";
+          $("#table").html(tbl);
+          $(".myTable").DataTable({
+            paging: false,
+            bFilter: false,
+            order: [[1, "desc"]]
+          });
+          const maxCases = Math.max(
+            ...apiResp.data.regional.map(
+              v => v.confirmedCasesIndian + v.confirmedCasesForeign
+            )
+          );
+          var color = d3
+            .scaleLinear()
+            .domain([-2, parseInt(0.6 * maxCases), maxCases])
+            .range(["#ddd", "#f92774", "#b21a03"]);
+          d3.json("finsl.json", function(error, data) {
+            var svg = g
+              .selectAll(".subunit")
+              .data(topojson.feature(data, data.objects.polygons).features)
+              .transition()
+              .duration(700)
+              .style("fill", function(d, i) {
+                const state_name = d.properties.st_nm;
+                if (state_name in casesByState) {
+                  return color(
+                    casesByState[state_name][0] + casesByState[state_name][1]
+                  );
+                } else {
+                  return "#ddd";
+                }
+              });
+          });
+        }
+      );
 
       function centerZoom(data) {
         var o = topojson.mesh(data, data.objects.polygons, function(a, b) {
@@ -72,8 +394,16 @@
         projection.scale(1).translate([0, 0]);
 
         var b = path.bounds(o),
-          s = 1 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height*1.1),
-          t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) * 0.5];
+          s =
+            1 /
+            Math.max(
+              (b[1][0] - b[0][0]) / width,
+              ((b[1][1] - b[0][1]) / height) * 1.1
+            ),
+          t = [
+            (width - s * (b[1][0] + b[0][0])) / 2,
+            (height - s * (b[1][1] + b[0][1])) * 0.5
+          ];
 
         var p = projection.scale(s).translate(t);
 
@@ -99,20 +429,43 @@
           .attr("d", path)
           .style("stroke", "#fff")
           .style("stroke-width", "1px")
-          // .on("mouseover", function(d) {    
-          //   tooltip.transition()    
-          //   .duration(200)    
-          //   .style("opacity", .9);    
-          //   tooltip.html(d.properties.st_nm)  
-          //   .style("left", (d3.event.pageX) + "px")   
-          //   .style("top", (d3.event.pageY - 28) + "px");  
-          // })          
-          // .on("mouseout", function(d) {   
-          //   tooltip.transition()    
-          //   .duration(500)    
-          //   .style("opacity", 0); 
-          // });
-
+          .on("mouseover", function(d) {
+            tooltip
+              .transition()
+              .duration(200)
+              .style("opacity", 0.9);
+          })
+          .on("mousemove", function(d) {
+            const elem = casesByState[d.properties.st_nm];
+            tooltip
+              .html(
+                `
+              <div class="hover_label">
+              <div class="state_label">${d.properties.st_nm}</div>
+              <div class="cases_label">
+                <div>Cases</div>
+                <div class="vali">${elem ? elem[0] + elem[1] : 0}</div>
+              </div>
+              <div class="cases_label">
+                <div>Deaths</div>
+                <div class="vali">${elem ? elem[2] : 0}</div>
+              </div>
+              <div class="cases_label">
+                <div>Recoveries</div>
+                <div class="vali">${elem ? elem[3] : 0}</div>
+              </div>
+               </div>
+              `
+              )
+              .style("left", d3.event.pageX + 20 + "px")
+              .style("top", d3.event.pageY - 48 + "px");
+          })
+          .on("mouseout", function(d) {
+            tooltip
+              .transition()
+              .duration(400)
+              .style("opacity", 0);
+          });
 
         return subunits;
       }
@@ -136,16 +489,13 @@
           });
       }
 
-      const colorSubunits = async (subunits) => {
-        const apiResponse = await fetch("https://api.rootnet.in/covid19-in/stats/latest");
-        console.log(apiResponse);
+      const colorSubunits = (subunits, dna) => {
+        // fetch("https://api.rootnet.in/covid19-in/stats/latest").then(resp=> resp.json).then(result=>console.log(result));
         var c = d3.scaleOrdinal(d3.schemeCategory20);
-        subunits
-          .style("fill", function(d, i) {
-            return c(i);
-          })
-          .style("opacity", ".6");
-      }
+        subunits.style("fill", function(d, i) {
+          return "#ddd";
+        });
+      };
     </script>
   </body>
 </html>
