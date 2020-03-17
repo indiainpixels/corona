@@ -1,311 +1,330 @@
 <html>
-  <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-49711524-10"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
 
-      gtag("config", "UA-49711524-10");
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-49711524-10"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "UA-49711524-10");
     </script>
     <meta property="og:url" content="https://indiainpixels.xyz/corona" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Go Corona Go!" />
-    <meta
-      property="og:description"
-      content="Track the number of Coronavirus cases in India daily"
-    />
-    <meta
-      property="og:image"
-      content="https://i.ibb.co/ckK2ybT/Screenshot-2020-03-17-at-9-28-45-AM.png"
-    />
+    <meta property="og:description" content="Track the number of Coronavirus cases in India daily" />
+    <meta property="og:image" content="https://i.ibb.co/ckK2ybT/Screenshot-2020-03-17-at-9-28-45-AM.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Go Corona Go!</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato&display=swap:400,900"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap:400,900" rel="stylesheet" />
     <style>
-      body {
-        font-family: "Lato", sans-serif;
-        margin: 0;
-        display: flex;
-        background: #4d2d75;
-      }
-
-      path.subunit:hover {
-        fill-opacity: 0.8;
-      }
-
-      div.tooltip {
-        position: absolute;
-        padding: 5px 10px;
-        color: black;
-        border-radius: 4px;
-        font: 12px sans-serif;
-        background: white;
-        border: 1px solid black;
-        pointer-events: none;
-        min-width: 150px;
-      }
-
-      #navbar {
-        width: 100vw;
-        height: 40px;
-        background: red;
-      }
-
-      .state_label {
-        font-size: 16px;
-        text-align: center;
-        font-weight: 600;
-        margin-bottom: 8px;
-      }
-
-      .cases_label {
-        display: flex;
-        justify-content: space-between;
-        padding: 4px;
-        font-size: 14px;
-      }
-
-      .cases_label > .vali {
-        font-weight: bold;
-      }
-
-      #metrics {
-        width: 250px;
-        background: #9d50bb;
-        /* fallback for old browsers */
-        background: -webkit-linear-gradient(to bottom, #6e48aa, #9d50bb);
-        /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to bottom, #6e48aa, #9d50bb);
-        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        color: white;
-        display: flex;
-        flex-direction: center;
-        align-items: center;
-        flex-direction: column;
-        padding-top: 80px;
-      }
-
-      a {
-        color: white;
-      }
-
-      #table {
-        flex: 1;
-        background: #9d50bb; /* fallback for old browsers */
-        background: -webkit-linear-gradient(
-          to bottom,
-          #6e48aa,
-          #9d50bb
-        ); /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(
-          to bottom,
-          #6e48aa,
-          #9d50bb
-        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        padding: 10px;
-        border-radius: 10px;
-        text-align: center;
-      }
-
-      .myTable {
-        margin-top: 80px !important;
-      }
-
-      #metrics > div {
-        text-align: center;
-        flex: 1;
-      }
-
-      .tcases > .heading {
-        font-size: 18px;
-        font-weight: 600;
-      }
-
-      .tcases > .heading2 {
-        font-size: 16px;
-        font-weight: 600;
-      }
-
-      .tcases > .va {
-        font-weight: 900;
-        font-size: 3em;
-      }
-      #right {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        margin: 40px 20px;
-      }
-      #global {
-        background: #9d50bb; /* fallback for old browsers */
-        background: -webkit-linear-gradient(
-          to bottom,
-          #6e48aa,
-          #9d50bb
-        ); /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(
-          to bottom,
-          #6e48aa,
-          #9d50bb
-        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        color: white;
-        font-size: 2em;
-      }
-
-      #total_cases {
-        font-weight: 900;
-        font-size: 3.2em;
-      }
-
-      .dataTables_info {
-        display: none;
-      }
-      table.dataTable.no-footer {
-        border-bottom: 1px solid transparent !important;
-      }
-
-      table.dataTable thead th,
-      table.dataTable thead td {
-        border-bottom: 1px solid white !important;
-      }
-      th {
-        color: white;
-      }
-
-      table.dataTable tbody tr {
-        background-color: transparent !important;
-        color: white;
-      }
-
-      @media only screen and (max-device-width: 480px) {
         body {
-          flex-direction: column;
+            font-family: "Lato", sans-serif;
+            margin: 0;
+            display: flex;
+            background: #4d2d75;
         }
+        
+        path.subunit:hover {
+            fill-opacity: 0.8;
+        }
+        
+        div.tooltip {
+            position: absolute;
+            padding: 5px 10px;
+            color: black;
+            border-radius: 4px;
+            font: 12px sans-serif;
+            background: white;
+            border: 1px solid black;
+            pointer-events: none;
+            min-width: 150px;
+        }
+        
+        #navbar {
+            width: 100vw;
+            height: 40px;
+            background: red;
+        }
+        
+        .state_label {
+            font-size: 16px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .cases_label {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px;
+            font-size: 14px;
+        }
+        
+        .cases_label>.vali {
+            font-weight: bold;
+        }
+        #metricsWrapper{
+          background: #9d50bb;
+            /* fallback for old browsers */
+            background: -webkit-linear-gradient(to bottom, #6e48aa, #9d50bb);
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to bottom, #6e48aa, #9d50bb);
+        }
+        
         #metrics {
-          width: 100vw;
-          height: 100vh;
-          padding-top: 20px;
-          order:1;
+            width: 250px;
+            height: 90vh;
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: white;
+            display: flex;
+            flex-direction: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 80px;
         }
+        
+        a {
+            color: white;
+        }
+        
         #table {
-          padding: 10px;
-          font-size: 14px;
+            flex: 1;
+            background: #9d50bb;
+            /* fallback for old browsers */
+            background: -webkit-linear-gradient( to bottom, #6e48aa, #9d50bb);
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient( to bottom, #6e48aa, #9d50bb);
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
         }
-        #global {
-          font-size: 1.2em;
+        
+        .myTable {
+            margin-top: 80px !important;
         }
+        
+        #metrics>div {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .tcases>.heading {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .tcases>.heading2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .tcases>.va {
+            font-weight: 900;
+            font-size: 3em;
+        }
+        
         #right {
-          margin: 0;
-          order:2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            margin: 40px 20px;
         }
-        #mapZone{
-          order:3;
+        
+        #global {
+            background: #9d50bb;
+            /* fallback for old browsers */
+            background: -webkit-linear-gradient( to bottom, #6e48aa, #9d50bb);
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient( to bottom, #6e48aa, #9d50bb);
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 2em;
         }
-      }
+        
+        #total_cases {
+            font-weight: 900;
+            font-size: 3.2em;
+        }
+        
+        .dataTables_info {
+            display: none;
+        }
+        
+        table.dataTable.no-footer {
+            border-bottom: 1px solid transparent !important;
+        }
+        
+        table.dataTable thead th,
+        table.dataTable thead td {
+            border-bottom: 1px solid white !important;
+        }
+        
+        th {
+            color: white;
+        }
+        
+        table.dataTable tbody tr {
+            background-color: transparent !important;
+            color: white;
+        }
+        
+        #controls {
+            color: white;
+            text-align: center;
+        }
+        button:hover{
+          cursor: pointer;
+        }
+        button:disabled{
+          opacity: 0.4;
+          cursor: none;
+        }
+        
+        #controls>button {
+            color: white;
+            background: #8F4EB6;
+            padding: 5px 10px;
+            outline: none;
+            cursor: pointer;
+            border:0;
+            margin: 0px 20px;
+            font-size: 16px;
+        }
+        
+        @media only screen and (max-device-width: 480px) {
+            body {
+                flex-direction: column;
+            }
+            #metrics {
+                width: 100vw;
+                height: 100vh;
+                padding-top: 20px;
+                order: 1;
+            }
+            #controls{
+              font-size: 12px!important;
+            }
+            #controls>button{
+              font-size: 12px!important;
+            }
+            #table {
+                padding: 10px;
+                font-size: 14px;
+            }
+            #global {
+                font-size: 1.2em;
+            }
+            #right {
+                margin: 0;
+                order: 2;
+            }
+            #mapZone {
+                order: 3;
+            }
+        }
     </style>
-    <link
-      href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
-      rel="stylesheet"
-    />
-  </head>
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+</head>
 
-  <body>
+<body>
+  <div id="metricsWrapper">
     <div id="metrics">
-      <div class="topbanner">
-        <div style="font-size: 28px; font-weight: 900;">Go Corona Go!</div>
-        <i style="font-size: 14px">Last updated on <span id="lastup"></span></i>
-      </div>
-      <div class="tcases">
-        <div class="heading">Total Cases</div>
-        <div id="total_cases"></div>
-      </div>
-      <div class="tcases">
-        <div class="heading2">Indians</div>
-        <div class="va" id="indian_cases"></div>
-      </div>
-      <div class="tcases">
-        <div class="heading2">Foreigners</div>
-        <div class="va" id="foreign_cases"></div>
-      </div>
-      <div class="tcases">
-        <div class="heading2">Deaths</div>
-        <div class="va" id="death_cases"></div>
-      </div>
-      <div class="tcases">
-        <div class="heading2">Recoveries</div>
-        <div class="va" id="cure_cases"></div>
-      </div>
-      <div class="botbanner">
-        <div style="font-size: 14px">
-          Data:
-          <a href="https://www.mohfw.gov.in/">Ministry of Health and Welfare</a>
+        <div class="topbanner">
+            <div style="font-size: 28px; font-weight: 900;">Go Corona Go!</div>
+            <i style="font-size: 14px">As of <span class="lastup"></span></i>
         </div>
-        <div style="font-size: 14px">
-          Created by
-          <a href="https://youtube.com/indiainpixels">India in Pixels</a>
+        <div class="tcases">
+            <div class="heading">Total Cases</div>
+            <div id="total_cases"></div>
         </div>
-        <div style="font-size: 14px">
-          API Credits:
-          <a href="https://github.com/amodm/api-covid19-in">Amod Malviya</a>
+        <div class="tcases">
+            <div class="heading2">Indians</div>
+            <div class="va" id="indian_cases"></div>
         </div>
-      </div>
+        <div class="tcases">
+            <div class="heading2">Foreigners</div>
+            <div class="va" id="foreign_cases"></div>
+        </div>
+        <div class="tcases">
+            <div class="heading2">Deaths</div>
+            <div class="va" id="death_cases"></div>
+        </div>
+        <div class="tcases">
+            <div class="heading2">Recoveries</div>
+            <div class="va" id="cure_cases"></div>
+        </div>
+        <div class="botbanner">
+            <div style="font-size: 14px">
+                Data:
+                <a href="https://www.mohfw.gov.in/">Ministry of Health and Welfare</a>
+            </div>
+            <div style="font-size: 14px">
+                Created by
+                <a href="https://youtube.com/indiainpixels">India in Pixels</a>
+            </div>
+            <div style="font-size: 14px">
+                API Credits:
+                <a href="https://github.com/amodm/api-covid19-in">Amod Malviya</a>
+            </div>
+        </div>
     </div>
+  </div>
     <div id="mapZone">
-    <div id="map"></div>
-    <div style="padding:20px">
-    <div id="disqus_thread"></div>
-  </div>
-  </div>
+        <div id="map"></div>
+        <div id="controls">
+            <button id="prevBtn" onclick="prev();">Previous</button>
+            <span class="lastup"></span>
+            <button id="nxtBtn" onclick="nxt();" disabled>Next</button>
+        </div>
+        <div style="padding:20px">
+            <div id="disqus_thread"></div>
+        </div>
+    </div>
     <div id="right">
-      <div id="global">
-        <div>
-          <div style="font-size: 14px">
-            Global Cases
-          </div>
-          <div id="global_cases"></div>
+        <div id="global">
+            <div>
+                <div style="font-size: 14px">
+                    Global Cases
+                </div>
+                <div id="global_cases"></div>
+            </div>
+            <div>
+                <div style="font-size: 14px">
+                    Global Deaths
+                </div>
+                <div id="global_deaths"></div>
+            </div>
+            <div>
+                <div style="font-size: 14px">
+                    Global Recoveries
+                </div>
+                <div id="global_recoveries"></div>
+            </div>
         </div>
-        <div>
-          <div style="font-size: 14px">
-            Global Deaths
-          </div>
-          <div id="global_deaths"></div>
-        </div>
-        <div>
-          <div style="font-size: 14px">
-            Global Recoveries
-          </div>
-          <div id="global_recoveries"></div>
-        </div>
-      </div>
-      <div id="table"></div>
+        <div id="table"></div>
     </div>
     <script>
-      (function() {
-        // DON'T EDIT BELOW THIS LINE
-        var d = document,
-          s = d.createElement("script");
-        s.src = "https://corona-3.disqus.com/embed.js";
-        s.setAttribute("data-timestamp", +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
+        (function() {
+            // DON'T EDIT BELOW THIS LINE
+            var d = document,
+                s = d.createElement("script");
+            s.src = "https://corona-3.disqus.com/embed.js";
+            s.setAttribute("data-timestamp", +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
     </script>
-    <noscript
-      >Please enable JavaScript to view the
+    <noscript>Please enable JavaScript to view the
       <a href="https://disqus.com/?ref_noscript"
         >comments powered by Disqus.</a
       ></noscript
@@ -324,7 +343,7 @@
         navigator.userAgent
       );
       var width = window.innerWidth * (isMobile ? 1 : 0.5);
-      var height = window.innerHeight * (isMobile ? 0.6 : 1);
+      var height = window.innerHeight * (isMobile ? 0.6 : 0.95);
 
       var projection = d3.geoMercator();
 
@@ -356,30 +375,54 @@
           // drawOuterBoundary(data, boundary);
         });
       }
-
-      drawMap();
-      casesByState = {};
-      $.get("https://api.rootnet.in/covid19-in/stats/latest", async apiResp => {
+      const populateGlobal = async () => {
         const global = await fetch("https://corona.lmao.ninja/all");
         const result = await global.json();
         $("#global_cases").html(result.cases);
         $("#global_deaths").html(result.deaths);
         $("#global_recoveries").html(result.recovered);
+      };
+      drawMap();
+      populateGlobal();
+      casesByState = {};
+      let prevVal = 0;
+      let apiResp = null;
 
+      $.get("https://api.rootnet.in/covid19-in/stats/daily", async apiRespo => {
+        apiResp = apiRespo;
+        populate(prevVal);
+      });
+
+      function prev(){
+        prevVal++;
+        populate(prevVal);
+      }
+      function nxt(){
+        prevVal--;
+        populate(prevVal);
+      }
+
+      function populate(prv) {
+        
+        $("#nxtBtn").attr("disabled", prv===0);
+        $("#prevBtn").attr("disabled", prv===apiResp.data.length-1);
+        
+        const reversed = apiResp.data.slice().reverse();
+        const frame = reversed[prv];
         const {
           total,
           discharged,
           deaths,
           confirmedCasesForeign,
           confirmedCasesIndian
-        } = apiResp.data.summary;
+        } = frame.summary;
         $("#total_cases").html(total);
         $("#indian_cases").html(confirmedCasesIndian);
         $("#foreign_cases").html(confirmedCasesForeign);
         $("#death_cases").html(deaths);
         $("#cure_cases").html(discharged);
-        $("#lastup").html(
-          moment(apiResp.lastOriginUpdate).format("DD MMMM, YYYY")
+        $(".lastup").html(
+          moment(frame.day).format("DD MMMM, YYYY")
         );
         let tbl = `<h2 style="color:white;">Indian States Stats</h2><table class="myTable">
                       <thead>
@@ -393,7 +436,7 @@
                       <tbody>
                       `;
 
-        apiResp.data.regional.forEach(st => {
+        frame.regional.forEach(st => {
           const {
             confirmedCasesForeign: f,
             confirmedCasesIndian: i,
@@ -415,11 +458,12 @@
           bFilter: false,
           order: [[1, "desc"]]
         });
-        const maxCases = Math.max(
-          ...apiResp.data.regional.map(
-            v => v.confirmedCasesIndian + v.confirmedCasesForeign
-          )
-        );
+        // const maxCases = Math.max(
+        //   ...frame.regional.map(
+        //     v => v.confirmedCasesIndian + v.confirmedCasesForeign
+        //   )
+        // );
+        const maxCases = 40;
         var color = d3
           .scaleLinear()
           .domain([-2, parseInt(0.6 * maxCases), maxCases])
@@ -441,7 +485,7 @@
               }
             });
         });
-      });
+      }
 
       function centerZoom(data) {
         var o = topojson.mesh(data, data.objects.polygons, function(a, b) {
