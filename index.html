@@ -200,6 +200,7 @@
           width: 100vw;
           height: 100vh;
           padding-top: 20px;
+          order:1;
         }
         #table {
           padding: 10px;
@@ -210,6 +211,10 @@
         }
         #right {
           margin: 0;
+          order:2;
+        }
+        #mapZone{
+          order:3;
         }
       }
     </style>
@@ -260,7 +265,12 @@
         </div>
       </div>
     </div>
+    <div id="mapZone">
     <div id="map"></div>
+    <div style="padding:20px">
+    <div id="disqus_thread"></div>
+  </div>
+  </div>
     <div id="right">
       <div id="global">
         <div>
@@ -284,6 +294,22 @@
       </div>
       <div id="table"></div>
     </div>
+    <script>
+      (function() {
+        // DON'T EDIT BELOW THIS LINE
+        var d = document,
+          s = d.createElement("script");
+        s.src = "https://corona-3.disqus.com/embed.js";
+        s.setAttribute("data-timestamp", +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript
+      >Please enable JavaScript to view the
+      <a href="https://disqus.com/?ref_noscript"
+        >comments powered by Disqus.</a
+      ></noscript
+    >
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
