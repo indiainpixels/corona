@@ -14,7 +14,17 @@
 
       gtag("config", "UA-49711524-10");
     </script>
-
+    <meta property="og:url" content="https://indiainpixels.xyz/corona" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Go Corona Go!" />
+    <meta
+      property="og:description"
+      content="Track the number of Coronavirus cases in India daily"
+    />
+    <meta
+      property="og:image"
+      content="https://i.ibb.co/ckK2ybT/Screenshot-2020-03-17-at-9-28-45-AM.png"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Go Corona Go!</title>
     <link
@@ -244,6 +254,10 @@
           Created by
           <a href="https://youtube.com/indiainpixels">India in Pixels</a>
         </div>
+        <div style="font-size: 14px">
+          API Credits:
+          <a href="https://github.com/amodm/api-covid19-in">Amod Malviya</a>
+        </div>
       </div>
     </div>
     <div id="map"></div>
@@ -319,31 +333,29 @@
 
       drawMap();
       casesByState = {};
-      $.get(
-        "https://cors-anywhere.herokuapp.com/https://api.rootnet.in/covid19-in/stats/latest",
-        async apiResp => {
-          const global = await fetch("https://corona.lmao.ninja/all");
-          const result = await global.json();
-          $("#global_cases").html(result.cases);
-          $("#global_deaths").html(result.deaths);
-          $("#global_recoveries").html(result.recovered);
+      $.get("https://api.rootnet.in/covid19-in/stats/latest", async apiResp => {
+        const global = await fetch("https://corona.lmao.ninja/all");
+        const result = await global.json();
+        $("#global_cases").html(result.cases);
+        $("#global_deaths").html(result.deaths);
+        $("#global_recoveries").html(result.recovered);
 
-          const {
-            total,
-            discharged,
-            deaths,
-            confirmedCasesForeign,
-            confirmedCasesIndian
-          } = apiResp.data.summary;
-          $("#total_cases").html(total);
-          $("#indian_cases").html(confirmedCasesIndian);
-          $("#foreign_cases").html(confirmedCasesForeign);
-          $("#death_cases").html(deaths);
-          $("#cure_cases").html(discharged);
-          $("#lastup").html(
-            moment(apiResp.lastOriginUpdate).format("DD MMMM, YYYY")
-          );
-          let tbl = `<h2 style="color:white;">Indian States Stats</h2><table class="myTable">
+        const {
+          total,
+          discharged,
+          deaths,
+          confirmedCasesForeign,
+          confirmedCasesIndian
+        } = apiResp.data.summary;
+        $("#total_cases").html(total);
+        $("#indian_cases").html(confirmedCasesIndian);
+        $("#foreign_cases").html(confirmedCasesForeign);
+        $("#death_cases").html(deaths);
+        $("#cure_cases").html(discharged);
+        $("#lastup").html(
+          moment(apiResp.lastOriginUpdate).format("DD MMMM, YYYY")
+        );
+        let tbl = `<h2 style="color:white;">Indian States Stats</h2><table class="myTable">
                       <thead>
                      <tr>
                       <th>State</td>
@@ -355,56 +367,55 @@
                       <tbody>
                       `;
 
-          apiResp.data.regional.forEach(st => {
-            const {
-              confirmedCasesForeign: f,
-              confirmedCasesIndian: i,
-              discharged: d,
-              deaths: r,
-              loc
-            } = st;
-            casesByState[loc] = [i, f, r, d];
-            console.log(i, f, r, d);
-            tbl += `<tr><td>${loc.replace(
-              "Union Territory of ",
-              ""
-            )}</td><td>${i + f}</td><td>${r}</td><td>${d}</td></tr>`;
-          });
-          tbl += "</tbody></table>";
-          $("#table").html(tbl);
-          $(".myTable").DataTable({
-            paging: false,
-            bFilter: false,
-            order: [[1, "desc"]]
-          });
-          const maxCases = Math.max(
-            ...apiResp.data.regional.map(
-              v => v.confirmedCasesIndian + v.confirmedCasesForeign
-            )
-          );
-          var color = d3
-            .scaleLinear()
-            .domain([-2, parseInt(0.6 * maxCases), maxCases])
-            .range(["#ddd", "#f92774", "#b21a03"]);
-          d3.json("finsl.json", function(error, data) {
-            var svg = g
-              .selectAll(".subunit")
-              .data(topojson.feature(data, data.objects.polygons).features)
-              .transition()
-              .duration(700)
-              .style("fill", function(d, i) {
-                const state_name = d.properties.st_nm;
-                if (state_name in casesByState) {
-                  return color(
-                    casesByState[state_name][0] + casesByState[state_name][1]
-                  );
-                } else {
-                  return "#ddd";
-                }
-              });
-          });
-        }
-      );
+        apiResp.data.regional.forEach(st => {
+          const {
+            confirmedCasesForeign: f,
+            confirmedCasesIndian: i,
+            discharged: d,
+            deaths: r,
+            loc
+          } = st;
+          casesByState[loc] = [i, f, r, d];
+          console.log(i, f, r, d);
+          tbl += `<tr><td>${loc.replace(
+            "Union Territory of ",
+            ""
+          )}</td><td>${i + f}</td><td>${r}</td><td>${d}</td></tr>`;
+        });
+        tbl += "</tbody></table>";
+        $("#table").html(tbl);
+        $(".myTable").DataTable({
+          paging: false,
+          bFilter: false,
+          order: [[1, "desc"]]
+        });
+        const maxCases = Math.max(
+          ...apiResp.data.regional.map(
+            v => v.confirmedCasesIndian + v.confirmedCasesForeign
+          )
+        );
+        var color = d3
+          .scaleLinear()
+          .domain([-2, parseInt(0.6 * maxCases), maxCases])
+          .range(["#ddd", "#f92774", "#b21a03"]);
+        d3.json("finsl.json", function(error, data) {
+          var svg = g
+            .selectAll(".subunit")
+            .data(topojson.feature(data, data.objects.polygons).features)
+            .transition()
+            .duration(700)
+            .style("fill", function(d, i) {
+              const state_name = d.properties.st_nm;
+              if (state_name in casesByState) {
+                return color(
+                  casesByState[state_name][0] + casesByState[state_name][1]
+                );
+              } else {
+                return "#ddd";
+              }
+            });
+        });
+      });
 
       function centerZoom(data) {
         var o = topojson.mesh(data, data.objects.polygons, function(a, b) {
