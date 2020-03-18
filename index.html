@@ -1,602 +1,257 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-49711524-10"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag("js", new Date());
-
-        gtag("config", "UA-49711524-10");
-    </script>
-    <meta property="og:url" content="https://indiainpixels.xyz/corona" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Go Corona Go!" />
-    <meta property="og:description" content="Track the number of Coronavirus cases in India daily" />
-    <meta property="og:image" content="https://i.ibb.co/ckK2ybT/Screenshot-2020-03-17-at-9-28-45-AM.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Go Corona Go!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap:400,900" rel="stylesheet" />
     <style>
         body {
-            font-family: "Lato", sans-serif;
+            font-family: "Helvetica Neue", sans-serif;
             margin: 0;
-            display: flex;
-            background: #4d2d75;
+            background: #fff7e5;
         }
         
-        path.subunit:hover {
-            fill-opacity: 0.8;
-        }
-        
-        div.tooltip {
+        #yrwrapper {
+            height: 100vh;
+            width: 300px;
+            background: #f4dac1;
             position: absolute;
-            padding: 5px 10px;
-            color: black;
-            border-radius: 4px;
-            font: 12px sans-serif;
-            background: white;
-            border: 1px solid black;
-            pointer-events: none;
-            min-width: 150px;
-        }
-        
-        #navbar {
-            width: 100vw;
-            height: 40px;
-            background: red;
-        }
-        
-        .state_label {
-            font-size: 16px;
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .cases_label {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px;
-            font-size: 14px;
-        }
-        
-        .cases_label>.vali {
-            font-weight: bold;
-        }
-        #metricsWrapper{
-          background: #9d50bb;
-            /* fallback for old browsers */
-            background: -webkit-linear-gradient(to bottom, #6e48aa, #9d50bb);
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to bottom, #6e48aa, #9d50bb);
-        }
-        
-        #metrics {
-            width: 250px;
-            height: 90vh;
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            color: white;
-            display: flex;
-            flex-direction: center;
-            align-items: center;
-            flex-direction: column;
-            padding-top: 80px;
-        }
-        
-        a {
-            color: white;
-        }
-        
-        #table {
-            flex: 1;
-            background: #9d50bb;
-            /* fallback for old browsers */
-            background: -webkit-linear-gradient( to bottom, #6e48aa, #9d50bb);
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient( to bottom, #6e48aa, #9d50bb);
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        
-        .myTable {
-            margin-top: 80px !important;
-        }
-        
-        #metrics>div {
-            text-align: center;
-            flex: 1;
-        }
-        
-        .tcases>.heading {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
-        .tcases>.heading2 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .tcases>.va {
-            font-weight: 900;
-            font-size: 3em;
-        }
-        
-        #right {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            margin: 40px 20px;
-        }
-        
-        #global {
-            background: #9d50bb;
-            /* fallback for old browsers */
-            background: -webkit-linear-gradient( to bottom, #6e48aa, #9d50bb);
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient( to bottom, #6e48aa, #9d50bb);
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            top: 0px;
+            right: 0px;
+            color: #51422d;
             padding: 20px;
+        }
+        
+        #yrcounter {
+            font-weight: 800;
+            font-size: 5em;
+            text-align: center;
+            margin-bottom: 25px;
+            position: absolute;
+            right: 400px;
+            top: 100px;
+        }
+        
+        .flagbox {
             display: flex;
-            justify-content: space-between;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            color: white;
+            align-items: center;
+            margin-left: 50px;
+            margin-bottom: -25px;
+        }
+        
+        #top5 {
+            margin-top: 50px;
+        }
+        
+        .flag {
+            font-size: 5em;
+            margin-right: 25px;
+            margin-top: 20px;
+        }
+        
+        .vaal {
+            font-weight: 600;
             font-size: 2em;
         }
-        
-        #total_cases {
-            font-weight: 900;
-            font-size: 3.2em;
-        }
-        
-        .dataTables_info {
-            display: none;
-        }
-        
-        table.dataTable.no-footer {
-            border-bottom: 1px solid transparent !important;
-        }
-        
-        table.dataTable thead th,
-        table.dataTable thead td {
-            border-bottom: 1px solid white !important;
-        }
-        
-        th {
-            color: white;
-        }
-        
-        table.dataTable tbody tr {
-            background-color: transparent !important;
-            color: white;
-        }
-        
-        #controls {
-            color: white;
-            text-align: center;
-        }
-        button:hover{
-          cursor: pointer;
-        }
-        button:disabled{
-          opacity: 0.4;
-          cursor: none;
-        }
-        
-        #controls>button {
-            color: white;
-            background: #8F4EB6;
-            padding: 5px 10px;
-            outline: none;
-            cursor: pointer;
-            border:0;
-            margin: 0px 20px;
-            font-size: 16px;
-        }
-        
-        @media only screen and (max-device-width: 480px) {
-            body {
-                flex-direction: column;
-            }
-            #metrics {
-                width: 100vw;
-                height: 100vh;
-                padding-top: 20px;
-                order: 1;
-            }
-            #controls{
-              font-size: 12px!important;
-            }
-            #controls>button{
-              font-size: 12px!important;
-            }
-            #table {
-                padding: 10px;
-                font-size: 14px;
-            }
-            #global {
-                font-size: 1.2em;
-            }
-            #right {
-                margin: 0;
-                order: 2;
-            }
-            #mapZone {
-                order: 3;
-            }
-        }
     </style>
-    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 </head>
 
 <body>
-  <div id="metricsWrapper">
-    <div id="metrics">
-        <div class="topbanner">
-            <div style="font-size: 28px; font-weight: 900;">Go Corona Go!</div>
-            <i style="font-size: 14px">As of <span class="lastup"></span></i>
-        </div>
-        <div class="tcases">
-            <div class="heading">Total Cases</div>
-            <div id="total_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Indians</div>
-            <div class="va" id="indian_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Foreigners</div>
-            <div class="va" id="foreign_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Deaths</div>
-            <div class="va" id="death_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Recoveries</div>
-            <div class="va" id="cure_cases"></div>
-        </div>
-        <div class="botbanner">
-            <div style="font-size: 14px">
-                Data:
-                <a href="https://www.mohfw.gov.in/">Ministry of Health and Welfare</a>
-            </div>
-            <div style="font-size: 14px">
-                Created by
-                <a href="https://youtube.com/indiainpixels">India in Pixels</a>
-            </div>
-            <div style="font-size: 14px">
-                API Credits:
-                <a href="https://github.com/amodm/api-covid19-in">Amod Malviya</a>
-            </div>
-        </div>
+    <div id="yrcounter"></div>
+    <div id="yrwrapper">
+        <div id="top5"></div>
     </div>
-  </div>
-    <div id="mapZone">
-        <div id="map"></div>
-        <div id="controls">
-            <button id="prevBtn" onclick="prev();">Previous</button>
-            <span class="lastup"></span>
-            <button id="nxtBtn" onclick="nxt();" disabled>Next</button>
-        </div>
-        <div style="padding:20px">
-            <div id="disqus_thread"></div>
-        </div>
-    </div>
-    <div id="right">
-        <div id="global">
-            <div>
-                <div style="font-size: 14px">
-                    Global Cases
-                </div>
-                <div id="global_cases"></div>
-            </div>
-            <div>
-                <div style="font-size: 14px">
-                    Global Deaths
-                </div>
-                <div id="global_deaths"></div>
-            </div>
-            <div>
-                <div style="font-size: 14px">
-                    Global Recoveries
-                </div>
-                <div id="global_recoveries"></div>
-            </div>
-        </div>
-        <div id="table"></div>
-    </div>
-    <script>
-        (function() {
-            // DON'T EDIT BELOW THIS LINE
-            var d = document,
-                s = d.createElement("script");
-            s.src = "https://corona-3.disqus.com/embed.js";
-            s.setAttribute("data-timestamp", +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
-    </script>
-    <noscript>Please enable JavaScript to view the
-      <a href="https://disqus.com/?ref_noscript"
-        >comments powered by Disqus.</a
-      ></noscript
-    >
+    <div id="map"></div>
+    <script src="d3.js"></script>
+    <script src="conf.js"></script>
+    <script src="d3geo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="topojson.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
     <script>
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
-      var width = window.innerWidth * (isMobile ? 1 : 0.5);
-      var height = window.innerHeight * (isMobile ? 0.6 : 0.95);
+        let yrnow = 0;
+        let inc = 0.009;
+        let currFacet = null;
+        let valid_countries = facet["0"];
 
-      var projection = d3.geoMercator();
+        function map(n, start1, stop1, start2, stop2) {
+            return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+        };
 
-      var path = d3
-        .geoPath()
-        .projection(projection)
-        .pointRadius(2);
+        function updateFacet() {
+            const prevyr = parseInt(yrnow);
+            const nxtyr = prevyr + 1;
+            if (yrnow > 54) yrnow = 54;
+            $("#yrcounter").html(moment("2020-01-22").add(yrnow, "days").format("DD MMM"))
+            $("#specific").html(moment("2020-01-22").add(yrnow, "days").format("hh:mm a"))
+            var color = d3
+                .scaleLinear()
+                .domain([0, 10, 1000, 10000])
+                .range(["#ddd", "#ff0", "#f92774", "#b21a03"]);
+            //TOP 5
+            const menow = {};
+            for (let cname in valid_countries) {
+                const valz = map(yrnow, prevyr, nxtyr, facet[prevyr][cname], facet[nxtyr][cname]);
+                menow[cname] = valz;
+            }
 
-      var svg = d3
-        .select("#map")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-      var g = svg.append("g");
-
-      var tooltip = d3
-        .select("#map")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-      function drawMap(dna) {
-        d3.json("finsl.json", function(error, data) {
-          var boundary = centerZoom(data);
-          var subunits = drawSubUnits(data);
-          colorSubunits(subunits, dna);
-          // drawSubUnitLabels(data);
-          // drawOuterBoundary(data, boundary);
-        });
-      }
-      const populateGlobal = async () => {
-        const global = await fetch("https://corona.lmao.ninja/all");
-        const result = await global.json();
-        $("#global_cases").html(result.cases);
-        $("#global_deaths").html(result.deaths);
-        $("#global_recoveries").html(result.recovered);
-      };
-      drawMap();
-      populateGlobal();
-      casesByState = {};
-      let prevVal = 0;
-      let apiResp = null;
-
-      $.get("https://api.rootnet.in/covid19-in/stats/daily", async apiRespo => {
-        apiResp = apiRespo;
-        populate(prevVal);
-      });
-
-      function prev(){
-        prevVal++;
-        populate(prevVal);
-      }
-      function nxt(){
-        prevVal--;
-        populate(prevVal);
-      }
-
-      function populate(prv) {
-        
-        $("#nxtBtn").attr("disabled", prv===0);
-        $("#prevBtn").attr("disabled", prv===apiResp.data.length-1);
-        
-        const reversed = apiResp.data.slice().reverse();
-        const frame = reversed[prv];
-        const {
-          total,
-          discharged,
-          deaths,
-          confirmedCasesForeign,
-          confirmedCasesIndian
-        } = frame.summary;
-        $("#total_cases").html(total);
-        $("#indian_cases").html(confirmedCasesIndian);
-        $("#foreign_cases").html(confirmedCasesForeign);
-        $("#death_cases").html(deaths);
-        $("#cure_cases").html(discharged);
-        $(".lastup").html(
-          moment(frame.day).format("DD MMMM, YYYY")
-        );
-        let tbl = `<h2 style="color:white;">Indian States Stats</h2><table class="myTable">
-                      <thead>
-                     <tr>
-                      <th>State</td>
-                      <th>Cases</td>
-                      <th>Deaths</td>
-                      <th>Cured</td>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      `;
-
-        frame.regional.forEach(st => {
-          const {
-            confirmedCasesForeign: f,
-            confirmedCasesIndian: i,
-            discharged: d,
-            deaths: r,
-            loc
-          } = st;
-          casesByState[loc] = [i, f, r, d];
-          console.log(i, f, r, d);
-          tbl += `<tr><td>${loc.replace(
-            "Union Territory of ",
-            ""
-          )}</td><td>${i + f}</td><td>${r}</td><td>${d}</td></tr>`;
-        });
-        tbl += "</tbody></table>";
-        $("#table").html(tbl);
-        $(".myTable").DataTable({
-          paging: false,
-          bFilter: false,
-          order: [[1, "desc"]]
-        });
-        // const maxCases = Math.max(
-        //   ...frame.regional.map(
-        //     v => v.confirmedCasesIndian + v.confirmedCasesForeign
-        //   )
-        // );
-        const maxCases = 40;
-        var color = d3
-          .scaleLinear()
-          .domain([-2, parseInt(0.6 * maxCases), maxCases])
-          .range(["#ddd", "#f92774", "#b21a03"]);
-        d3.json("finsl.json", function(error, data) {
-          var svg = g
-            .selectAll(".subunit")
-            .data(topojson.feature(data, data.objects.polygons).features)
-            .transition()
-            .duration(700)
-            .style("fill", function(d, i) {
-              const state_name = d.properties.st_nm;
-              if (state_name in casesByState) {
-                return color(
-                  casesByState[state_name][0] + casesByState[state_name][1]
-                );
-              } else {
-                return "#ddd";
-              }
+            const top5 = Object.entries(menow).sort((b, a) => a[1] - b[1]).slice(0, 7);
+            top5.push(["Pakistan", menow["Pakistan"]])
+            top5.push(["India", menow["India"]])
+            $("#top5").html("");
+            for (let elem of top5) {
+                const kimo = kimoji.find(v => v.name === elem[0]);
+                $("#top5").append(`<div class="flagbox">
+              <div class="flag">${kimo && kimo.emoji}</div>
+              <div class="naambox">
+              <div class="naam">${elem[0]}</div>
+              <div class="vaal">${parseInt(elem[1])}</div>
+              </div>
+              </div>`)
+            }
+            d3.json("world.json", function(error, data) {
+                var svg = g
+                    .selectAll(".subunit")
+                    .data(topojson.feature(data, data.objects.polygons).features)
+                    // .transition()
+                    // .duration(700)
+                    .style("fill", function(d, i) {
+                        const cname = d.properties.name;
+                        if (cname in menow) {
+                            return color(menow[cname]);
+                        } else {
+                            return "#ddd";
+                        }
+                    });
             });
+        }
+
+
+        var width = window.innerWidth,
+            height = window.innerHeight;
+
+        var projection = d3.geoRobinson();
+
+        var path = d3
+            .geoPath()
+            .projection(projection)
+            .pointRadius(2);
+
+        var svg = d3
+            .select("#map")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var g = svg.append("g");
+
+        d3.json("world.json", function(error, data) {
+            centerZoom(data);
+            var subunits = drawSubUnits(data);
+            // colorSubunits(subunits);
+            // drawSubUnitLabels(data);
+            // drawPlaces(data);
+            // drawOuterBoundary(data, boundary);
         });
-      }
 
-      function centerZoom(data) {
-        var o = topojson.mesh(data, data.objects.polygons, function(a, b) {
-          return a === b;
-        });
+        function centerZoom(data) {
+            var o = topojson.mesh(data, data.objects.polygons, function(a, b) {
+                return a === b;
+            });
 
-        projection.scale(1).translate([0, 0]);
+            projection.scale(1).translate([0, 0]);
 
-        var b = path.bounds(o),
-          s =
-            1 /
-            Math.max(
-              (b[1][0] - b[0][0]) / width,
-              ((b[1][1] - b[0][1]) / height) * 1.1
-            ),
-          t = [
-            (width - s * (b[1][0] + b[0][0])) / 2,
-            (height - s * (b[1][1] + b[0][1])) * 0.5
-          ];
+            var b = path.bounds(o),
+                s =
+                1 /
+                Math.max((b[1][0] - b[0][0]) / width * 1.2, (b[1][1] - b[0][1]) / height * 1),
+                t = [
+                    (width - s * (b[1][0] + b[0][0])) * 0.35,
+                    (height - s * (b[1][1] + b[0][1])) * 0.6
+                ];
 
-        var p = projection.scale(s).translate(t);
+            var p = projection.scale(s).translate(t);
 
-        return o;
-      }
+            return o;
+        }
 
-      function drawOuterBoundary(data, boundary) {
-        g.append("path")
-          .datum(boundary)
-          .attr("d", path)
-          .attr("class", "subunit-boundary")
-          .attr("fill", "none")
-          .attr("stroke", "#3a403d");
-      }
+        function drawOuterBoundary(data, boundary) {
+            g.append("path")
+                .datum(boundary)
+                .attr("d", path)
+                .attr("class", "subunit-boundary")
+                .attr("fill", "none")
+                .attr("stroke", "#3a403d");
+        }
 
-      function drawSubUnits(data) {
-        var subunits = g
-          .selectAll(".subunit")
-          .data(topojson.feature(data, data.objects.polygons).features)
-          .enter()
-          .append("path")
-          .attr("class", "subunit")
-          .attr("d", path)
-          .style("stroke", "#fff")
-          .style("stroke-width", "1px")
-          .on("mouseover", function(d) {
-            tooltip
-              .transition()
-              .duration(200)
-              .style("opacity", 0.9);
-          })
-          .on("mousemove", function(d) {
-            const elem = casesByState[d.properties.st_nm];
-            tooltip
-              .html(
-                `
-              <div class="hover_label">
-              <div class="state_label">${d.properties.st_nm}</div>
-              <div class="cases_label">
-                <div>Cases</div>
-                <div class="vali">${elem ? elem[0] + elem[1] : 0}</div>
-              </div>
-              <div class="cases_label">
-                <div>Deaths</div>
-                <div class="vali">${elem ? elem[2] : 0}</div>
-              </div>
-              <div class="cases_label">
-                <div>Recoveries</div>
-                <div class="vali">${elem ? elem[3] : 0}</div>
-              </div>
-               </div>
-              `
-              )
-              .style("left", d3.event.pageX + 20 + "px")
-              .style("top", d3.event.pageY - 48 + "px");
-          })
-          .on("mouseout", function(d) {
-            tooltip
-              .transition()
-              .duration(400)
-              .style("opacity", 0);
-          });
+        function drawPlaces(data) {
+            g.append("path")
+                .datum(topojson.feature(data, data.objects.places))
+                .attr("d", path)
+                .attr("class", "place");
 
-        return subunits;
-      }
+            g.selectAll(".place-label")
+                .data(topojson.feature(data, data.objects.places).features)
+                .enter()
+                .append("text")
+                .attr("class", "place-label")
+                .attr("transform", function(d) {
+                    return "translate(" + projection(d.geometry.coordinates) + ")";
+                })
+                .attr("dy", ".35em")
+                .attr("x", 6)
+                .attr("text-anchor", "start")
+                .style("font-size", ".7em")
+                .style("text-shadow", "0px 0px 2px #fff")
+                .text(function(d) {
+                    return d.properties.name;
+                });
+        }
 
-      function drawSubUnitLabels(data) {
-        g.selectAll(".subunit-label")
-          .data(topojson.feature(data, data.objects.polygons).features)
-          .enter()
-          .append("text")
-          .attr("class", "subunit-label")
-          .attr("transform", function(d) {
-            return "translate(" + path.centroid(d) + ")";
-          })
-          .attr("dy", ".35em")
-          .attr("text-anchor", "middle")
-          .style("font-size", ".5em")
-          .style("text-shadow", "0px 0px 2px #fff")
-          .style("text-transform", "uppercase")
-          .text(function(d) {
-            return d.properties.st_nm;
-          });
-      }
+        function drawSubUnits(data) {
+            var subunits = g
+                .selectAll(".subunit")
+                .data(topojson.feature(data, data.objects.polygons).features)
+                .enter()
+                .append("path")
+                .attr("class", "subunit")
+                .attr("d", path)
+                .style("stroke", "#333")
+                .style("stroke-width", "1px");
 
-      const colorSubunits = (subunits, dna) => {
-        // fetch("https://api.rootnet.in/covid19-in/stats/latest").then(resp=> resp.json).then(result=>console.log(result));
-        var c = d3.scaleOrdinal(d3.schemeCategory20);
-        subunits.style("fill", function(d, i) {
-          return "#ddd";
-        });
-      };
+            return subunits;
+        }
+
+        function drawSubUnitLabels(data) {
+            g.selectAll(".subunit-label")
+                .data(topojson.feature(data, data.objects.polygons).features)
+                .enter()
+                .append("text")
+                .attr("class", "subunit-label")
+                .attr("transform", function(d) {
+                    return "translate(" + path.centroid(d) + ")";
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", "middle")
+                .style("font-size", ".5em")
+                .style("text-shadow", "0px 0px 2px #fff")
+                .style("text-transform", "uppercase")
+                .text(function(d) {
+                    return d.properties.name;
+                });
+        }
+
+        function colorSubunits(subunits) {
+            var c = d3.scaleOrdinal(d3.schemeCategory20);
+            subunits
+                .style("fill", function(d, i) {
+                    return c(i);
+                })
+                .style("opacity", ".6");
+        }
+        setInterval(() => {
+            yrnow += inc;
+            updateFacet();
+        }, 50)
     </script>
-  </body>
+</body>
+
 </html>
