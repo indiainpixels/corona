@@ -15,11 +15,11 @@
     </script>
     <meta property="og:url" content="https://indiainpixels.xyz/corona" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Go Corona Go!" />
+    <meta property="og:title" content="Corona Tracker" />
     <meta property="og:description" content="Track the number of Coronavirus cases in India daily" />
     <meta property="og:image" content="https://i.ibb.co/ckK2ybT/Screenshot-2020-03-17-at-9-28-45-AM.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Go Corona Go!</title>
+    <title>Corona Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap:400,900" rel="stylesheet" />
     <style>
         body {
@@ -68,8 +68,9 @@
         .cases_label>.vali {
             font-weight: bold;
         }
-        #metricsWrapper{
-          background: #9d50bb;
+        
+        #metricsWrapper {
+            background: #9d50bb;
             /* fallback for old browsers */
             background: -webkit-linear-gradient(to bottom, #6e48aa, #9d50bb);
             /* Chrome 10-25, Safari 5.1-6 */
@@ -183,12 +184,14 @@
             color: white;
             text-align: center;
         }
-        button:hover{
-          cursor: pointer;
+        
+        button:hover {
+            cursor: pointer;
         }
-        button:disabled{
-          opacity: 0.4;
-          cursor: none;
+        
+        button:disabled {
+            opacity: 0.4;
+            cursor: none;
         }
         
         #controls>button {
@@ -197,7 +200,7 @@
             padding: 5px 10px;
             outline: none;
             cursor: pointer;
-            border:0;
+            border: 0;
             margin: 0px 20px;
             font-size: 16px;
         }
@@ -212,11 +215,11 @@
                 padding-top: 20px;
                 order: 1;
             }
-            #controls{
-              font-size: 12px!important;
+            #controls {
+                font-size: 12px!important;
             }
-            #controls>button{
-              font-size: 12px!important;
+            #controls>button {
+                font-size: 12px!important;
             }
             #table {
                 padding: 10px;
@@ -238,48 +241,48 @@
 </head>
 
 <body>
-  <div id="metricsWrapper">
-    <div id="metrics">
-        <div class="topbanner">
-            <div style="font-size: 28px; font-weight: 900;">Go Corona Go!</div>
-            <i style="font-size: 14px">As of <span class="lastup"></span></i>
-        </div>
-        <div class="tcases">
-            <div class="heading">Total Cases</div>
-            <div id="total_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Indians</div>
-            <div class="va" id="indian_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Foreigners</div>
-            <div class="va" id="foreign_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Deaths</div>
-            <div class="va" id="death_cases"></div>
-        </div>
-        <div class="tcases">
-            <div class="heading2">Recoveries</div>
-            <div class="va" id="cure_cases"></div>
-        </div>
-        <div class="botbanner">
-            <div style="font-size: 14px">
-                Data:
-                <a href="https://www.mohfw.gov.in/">Ministry of Health and Welfare</a>
+    <div id="metricsWrapper">
+        <div id="metrics">
+            <div class="topbanner">
+                <div style="font-size: 28px; font-weight: 900;">Corona Tracker</div>
+                <i style="font-size: 14px">As of <span class="lastup"></span></i>
             </div>
-            <div style="font-size: 14px">
-                Created by
-                <a href="https://youtube.com/indiainpixels">India in Pixels</a>
+            <div class="tcases">
+                <div class="heading">Total Cases</div>
+                <div id="total_cases"></div>
             </div>
-            <div style="font-size: 14px">
-                API Credits:
-                <a href="https://github.com/amodm/api-covid19-in">Amod Malviya</a>
+            <div class="tcases">
+                <div class="heading2">Indians</div>
+                <div class="va" id="indian_cases"></div>
+            </div>
+            <div class="tcases">
+                <div class="heading2">Foreigners</div>
+                <div class="va" id="foreign_cases"></div>
+            </div>
+            <div class="tcases">
+                <div class="heading2">Deaths</div>
+                <div class="va" id="death_cases"></div>
+            </div>
+            <div class="tcases">
+                <div class="heading2">Recoveries</div>
+                <div class="va" id="cure_cases"></div>
+            </div>
+            <div class="botbanner">
+                <div style="font-size: 14px">
+                    Data:
+                    <a href="https://www.mohfw.gov.in/">Ministry of Health and Welfare</a>
+                </div>
+                <div style="font-size: 14px">
+                    Created by
+                    <a href="https://youtube.com/indiainpixels">India in Pixels</a>
+                </div>
+                <div style="font-size: 14px">
+                    API Credits:
+                    <a href="https://github.com/amodm/api-covid19-in">Amod Malviya</a>
+                </div>
             </div>
         </div>
     </div>
-  </div>
     <div id="mapZone">
         <div id="map"></div>
         <div id="controls">
