@@ -438,7 +438,7 @@
                       </thead>
                       <tbody>
                       `;
-
+        casesByState = {};
         frame.regional.forEach(st => {
           const {
             confirmedCasesForeign: f,
@@ -484,6 +484,7 @@
                   casesByState[state_name][0] + casesByState[state_name][1]
                 );
               } else {
+                console.log(state_name,"not there")
                 return "#ddd";
               }
             });
