@@ -448,7 +448,6 @@
             loc
           } = st;
           casesByState[loc] = [i, f, r, d];
-          console.log(i, f, r, d);
           tbl += `<tr><td>${loc.replace(
             "Union Territory of ",
             ""
@@ -484,7 +483,6 @@
                   casesByState[state_name][0] + casesByState[state_name][1]
                 );
               } else {
-                console.log(state_name,"not there")
                 return "#ddd";
               }
             });
