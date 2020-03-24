@@ -4271,7 +4271,7 @@
           {
             "arcs": [[136, 137, -134, -61, 138]],
             "type": "Polygon",
-            "properties": { "st_nm": "Union Territory of Jammu and Kashmir" }
+            "properties": { "st_nm": "Jammu and Kashmir" }
           },
           {
             "arcs": [[-108, -113, -41, -84, -33]],
@@ -4312,7 +4312,7 @@
             "properties": { "st_nm": "Nagaland" }
           },
           { "arcs": [[-87, -131]], "type": "Polygon", "properties": { "st_nm": "Delhi" } },
-          { "arcs": [[-137, 153, -136, 154]], "type": "Polygon", "properties": { "st_nm": "Union Territory of Ladakh" } }
+          { "arcs": [[-137, 153, -136, 154]], "type": "Polygon", "properties": { "st_nm": "Ladakh" } }
         ]
       }
     }
