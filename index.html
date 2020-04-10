@@ -378,12 +378,17 @@
           // drawOuterBoundary(data, boundary);
         });
       }
+      const zeta = num => {
+        if(num>1000000)
+        return (num/1000000).toFixed(2)+"M";
+        else return (num/1000).toFixed(0)+"K"
+      }
       const populateGlobal = async () => {
         const global = await fetch("https://corona.lmao.ninja/all");
         const result = await global.json();
-        $("#global_cases").html(result.cases);
-        $("#global_deaths").html(result.deaths);
-        $("#global_recoveries").html(result.recovered);
+        $("#global_cases").html(zeta(result.cases));
+        $("#global_deaths").html(zeta(result.deaths));
+        $("#global_recoveries").html(zeta(result.recovered));
       };
       drawMap();
       populateGlobal();
@@ -465,7 +470,7 @@
         //     v => v.confirmedCasesIndian + v.confirmedCasesForeign
         //   )
         // );
-        const maxCases = 120;
+        const maxCases = 1000;
         var color = d3
           .scaleLinear()
           .domain([-2, parseInt(0.6 * maxCases), maxCases])
