@@ -4138,7 +4138,7 @@
               [[12]]
             ],
             "type": "MultiPolygon",
-            "properties": { "st_nm": "Andaman & Nicobar Island" }
+            "properties": { "st_nm": "Andaman and Nicobar Islands" }
           },
           {
             "arcs": [[[13]], [[14, 15, 16, 17, 18]]],
@@ -4206,7 +4206,7 @@
           {
             "arcs": [[-37, 77, -18, 78, 79]],
             "type": "Polygon",
-            "properties": { "st_nm": "Telengana" }
+            "properties": { "st_nm": "Telangana" }
           },
           { "arcs": [[-26, 80, 81]], "type": "Polygon", "properties": { "st_nm": "Tripura" } },
           {
@@ -4271,7 +4271,7 @@
           {
             "arcs": [[136, 137, -134, -61, 138]],
             "type": "Polygon",
-            "properties": { "st_nm": "Union Territory of Jammu and Kashmir" }
+            "properties": { "st_nm": "Jammu and Kashmir" }
           },
           {
             "arcs": [[-108, -113, -41, -84, -33]],
@@ -4312,7 +4312,7 @@
             "properties": { "st_nm": "Nagaland" }
           },
           { "arcs": [[-87, -131]], "type": "Polygon", "properties": { "st_nm": "Delhi" } },
-          { "arcs": [[-137, 153, -136, 154]], "type": "Polygon", "properties": { "st_nm": "Union Territory of Ladakh" } }
+          { "arcs": [[-137, 153, -136, 154]], "type": "Polygon", "properties": { "st_nm": "Ladakh" } }
         ]
       }
     }

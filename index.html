@@ -13,6 +13,7 @@
             height: 100vh;
             width: 300px;
             background: #f4dac1;
+            display: none;
             position: absolute;
             top: 0px;
             right: 0px;
@@ -70,7 +71,7 @@
         let yrnow = 0;
         let inc = 0.009;
         let currFacet = null;
-        let valid_countries = facet["0"];
+        let valid_countries = facet["73"];
 
         function map(n, start1, stop1, start2, stop2) {
             return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
@@ -79,42 +80,44 @@
         function updateFacet() {
             const prevyr = parseInt(yrnow);
             const nxtyr = prevyr + 1;
-            if (yrnow > 54) yrnow = 54;
-            $("#yrcounter").html(moment("2020-01-22").add(yrnow, "days").format("DD MMM"))
-            $("#specific").html(moment("2020-01-22").add(yrnow, "days").format("hh:mm a"))
+            if (yrnow > 73) yrnow = 73;
+            $("#yrcounter").html(moment("2020-01-30").add(yrnow, "days").format("DD MMM"))
+            $("#specific").html(moment("2020-01-30").add(yrnow, "days").format("hh:mm a"))
             var color = d3
                 .scaleLinear()
-                .domain([0, 10, 1000, 10000])
+                .domain([0, 10, 400, 800])
                 .range(["#ddd", "#ff0", "#f92774", "#b21a03"]);
             //TOP 5
             const menow = {};
             for (let cname in valid_countries) {
+                console.log(nxtyr, facet[nxtyr])
                 const valz = map(yrnow, prevyr, nxtyr, facet[prevyr][cname], facet[nxtyr][cname]);
                 menow[cname] = valz;
             }
 
-            const top5 = Object.entries(menow).sort((b, a) => a[1] - b[1]).slice(0, 7);
-            top5.push(["Pakistan", menow["Pakistan"]])
-            top5.push(["India", menow["India"]])
-            $("#top5").html("");
-            for (let elem of top5) {
-                const kimo = kimoji.find(v => v.name === elem[0]);
-                $("#top5").append(`<div class="flagbox">
-              <div class="flag">${kimo && kimo.emoji}</div>
-              <div class="naambox">
-              <div class="naam">${elem[0]}</div>
-              <div class="vaal">${parseInt(elem[1])}</div>
-              </div>
-              </div>`)
-            }
-            d3.json("world.json", function(error, data) {
+            // const top5 = Object.entries(menow).sort((b, a) => a[1] - b[1]).slice(0, 7);
+            // top5.push(["Pakistan", menow["Pakistan"]])
+            // top5.push(["India", menow["India"]])
+            // $("#top5").html("");
+            // for (let elem of top5) {
+            //     const kimo = kimoji.find(v => v.name === elem[0]);
+            //     $("#top5").append(`<div class="flagbox">
+            //   <div class="flag">${kimo && kimo.emoji}</div>
+            //   <div class="naambox">
+            //   <div class="naam">${elem[0]}</div>
+            //   <div class="vaal">${parseInt(elem[1])}</div>
+            //   </div>
+            //   </div>`)
+            // }
+            
+            d3.json("finsl.json", function(error, data) {
                 var svg = g
                     .selectAll(".subunit")
                     .data(topojson.feature(data, data.objects.polygons).features)
                     // .transition()
                     // .duration(700)
                     .style("fill", function(d, i) {
-                        const cname = d.properties.name;
+                        const cname = d.properties.st_nm;
                         if (cname in menow) {
                             return color(menow[cname]);
                         } else {
@@ -128,7 +131,7 @@
         var width = window.innerWidth,
             height = window.innerHeight;
 
-        var projection = d3.geoRobinson();
+        var projection = d3.geoMercator();
 
         var path = d3
             .geoPath()
@@ -143,7 +146,7 @@
 
         var g = svg.append("g");
 
-        d3.json("world.json", function(error, data) {
+        d3.json("finsl.json", function(error, data) {
             centerZoom(data);
             var subunits = drawSubUnits(data);
             // colorSubunits(subunits);
@@ -160,13 +163,16 @@
             projection.scale(1).translate([0, 0]);
 
             var b = path.bounds(o),
-                s =
-                1 /
-                Math.max((b[1][0] - b[0][0]) / width * 1.2, (b[1][1] - b[0][1]) / height * 1),
-                t = [
-                    (width - s * (b[1][0] + b[0][0])) * 0.35,
-                    (height - s * (b[1][1] + b[0][1])) * 0.6
-                ];
+          s =
+            1 /
+            Math.max(
+              (b[1][0] - b[0][0]) / width,
+              ((b[1][1] - b[0][1]) / height) * 1.1
+            ),
+          t = [
+            (width - s * (b[1][0] + b[0][0])) / 2,
+            (height - s * (b[1][1] + b[0][1])) * 0.5
+          ];
 
             var p = projection.scale(s).translate(t);
 
