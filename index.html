@@ -6,23 +6,28 @@
         body {
             font-family: "Helvetica Neue", sans-serif;
             margin: 0;
-            background: #fff7e5;
+            background: #0B154E;
+        }
+
+        .flagbox:nth-child(3){
+            margin-bottom: 10px;
         }
         
         #yrwrapper {
             height: 100vh;
             width: 300px;
-            background: #f4dac1;
+            background: #0D0B33;
             position: absolute;
             top: 0px;
             right: 0px;
-            color: #51422d;
+            color: white;
             padding: 20px;
         }
         
         #yrcounter {
             font-weight: 800;
             font-size: 5em;
+            color: white;
             text-align: center;
             margin-bottom: 25px;
             position: absolute;
@@ -68,7 +73,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
         let yrnow = 0;
-        let inc = 0.009;
+        let inc = 0.01;
         let currFacet = null;
         let valid_countries = facet["0"];
 
@@ -79,13 +84,13 @@
         function updateFacet() {
             const prevyr = parseInt(yrnow);
             const nxtyr = prevyr + 1;
-            if (yrnow > 54) yrnow = 54;
+            if (yrnow > 91) yrnow = 91;
             $("#yrcounter").html(moment("2020-01-22").add(yrnow, "days").format("DD MMM"))
             $("#specific").html(moment("2020-01-22").add(yrnow, "days").format("hh:mm a"))
             var color = d3
                 .scaleLinear()
-                .domain([0, 10, 1000, 10000])
-                .range(["#ddd", "#ff0", "#f92774", "#b21a03"]);
+                .domain([0, 5, 1000, 10000])
+                .range(["#09113a", "#ff0", "#f92774", "#b21a03"]);
             //TOP 5
             const menow = {};
             for (let cname in valid_countries) {
@@ -93,9 +98,16 @@
                 menow[cname] = valz;
             }
 
-            const top5 = Object.entries(menow).sort((b, a) => a[1] - b[1]).slice(0, 7);
-            top5.push(["Pakistan", menow["Pakistan"]])
+            //const top5 = Object.entries(menow).sort((b, a) => a[1] - b[1]).slice(0, 7);
+            let top5 = [];
             top5.push(["India", menow["India"]])
+            top5.push(["China", menow["China"]])
+            top5.push(["USA", menow["USA"]])
+            // top5.push(["Italy", menow["Italy"]])
+            // top5.push(["Spain", menow["Spain"]])
+            // top5.push(["South Korea", menow["South Korea"]])
+            const newEntrants = Object.entries(menow).sort((b, a) => a[1] - b[1]).filter(v=>"IndiaChinaUSADiamond Princess".indexOf(v[0])==-1).slice(0,5);
+            top5 = [...top5, ...newEntrants];
             $("#top5").html("");
             for (let elem of top5) {
                 const kimo = kimoji.find(v => v.name === elem[0]);
@@ -118,7 +130,7 @@
                         if (cname in menow) {
                             return color(menow[cname]);
                         } else {
-                            return "#ddd";
+                            return "#09113a";
                         }
                     });
             });
@@ -214,7 +226,7 @@
                 .append("path")
                 .attr("class", "subunit")
                 .attr("d", path)
-                .style("stroke", "#333")
+                .style("stroke", "#666")
                 .style("stroke-width", "1px");
 
             return subunits;
