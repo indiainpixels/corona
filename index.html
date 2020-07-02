@@ -6,7 +6,7 @@
         body {
             font-family: "Helvetica Neue", sans-serif;
             margin: 0;
-            background: #0B154E;
+            background: #fffce0;
         }
 
         .flagbox:nth-child(3){
@@ -27,7 +27,7 @@
         #yrcounter {
             font-weight: 800;
             font-size: 5em;
-            color: white;
+            color: black;
             text-align: center;
             margin-bottom: 25px;
             position: absolute;
@@ -72,10 +72,10 @@
     <script src="topojson.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
-        let yrnow = 0;
-        let inc = 0.01;
+        let yrnow = 1949;
+        let inc = 0.015;
         let currFacet = null;
-        let valid_countries = facet["0"];
+        let valid_countries = facet["1949"];
 
         function map(n, start1, stop1, start2, stop2) {
             return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
@@ -84,17 +84,17 @@
         function updateFacet() {
             const prevyr = parseInt(yrnow);
             const nxtyr = prevyr + 1;
-            if (yrnow > 91) yrnow = 91;
-            $("#yrcounter").html(moment("2020-01-22").add(yrnow, "days").format("DD MMM"))
+            if (yrnow > 2020) yrnow = 2020;
+            $("#yrcounter").html(parseInt(yrnow))
             $("#specific").html(moment("2020-01-22").add(yrnow, "days").format("hh:mm a"))
             var color = d3
                 .scaleLinear()
-                .domain([0, 5, 1000, 10000])
-                .range(["#09113a", "#ff0", "#f92774", "#b21a03"]);
+                .domain([0, 5000, 100000, 200000])
+                .range(["#fffce0", "#ff0", "#f92774", "#b21a03"]);
             //TOP 5
             const menow = {};
             for (let cname in valid_countries) {
-                const valz = map(yrnow, prevyr, nxtyr, facet[prevyr][cname], facet[nxtyr][cname]);
+                const valz = map(yrnow, prevyr, nxtyr, facet[prevyr][cname] || 0, facet[nxtyr][cname] || 0);
                 menow[cname] = valz;
             }
 
@@ -130,7 +130,7 @@
                         if (cname in menow) {
                             return color(menow[cname]);
                         } else {
-                            return "#09113a";
+                            return "#fffce0";
                         }
                     });
             });

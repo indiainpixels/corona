@@ -7741,7 +7741,7 @@
           "type": "Polygon",
           "properties": {
             "id": "COD",
-            "name": "Democratic Republic of the Congo",
+            "name": "Democratic Republic of Congo",
             "Alpha-2": "CD"
           }
         },
@@ -7750,7 +7750,7 @@
           "type": "Polygon",
           "properties": {
             "id": "COG",
-            "name": "Republic of the Congo",
+            "name": "Republic of Congo",
             "Alpha-2": "CG"
           }
         },
