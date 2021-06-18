@@ -1,263 +1,565 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <style>
-        body {
-            font-family: "Helvetica Neue", sans-serif;
-            margin: 0;
-            background: #fff7e5;
-        }
-        
-        #yrwrapper {
-            height: 100vh;
-            width: 300px;
-            background: #f4dac1;
-            display: none;
-            position: absolute;
-            top: 0px;
-            right: 0px;
-            color: #51422d;
-            padding: 20px;
-        }
-        
-        #yrcounter {
-            font-weight: 800;
-            font-size: 5em;
-            text-align: center;
-            margin-bottom: 25px;
-            position: absolute;
-            right: 400px;
-            top: 100px;
-        }
-        
-        .flagbox {
-            display: flex;
-            align-items: center;
-            margin-left: 50px;
-            margin-bottom: -25px;
-        }
-        
-        #top5 {
-            margin-top: 50px;
-        }
-        
-        .flag {
-            font-size: 5em;
-            margin-right: 25px;
-            margin-top: 20px;
-        }
-        
-        .vaal {
-            font-weight: 600;
-            font-size: 2em;
-        }
-    </style>
-</head>
+      body {
+        font-family: 'ProductSans-Regular', sans-serif;
+        margin: 0;
+        background: #fff;
+      }
 
-<body>
+      #yrwrapper {
+        height: 100vh;
+        width: 300px;
+        background: #f4dac1;
+        display: none;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        color: #51422d;
+        padding: 20px;
+      }
+
+      #yrcounter {
+        font-weight: 800;
+        font-size: 5em;
+        text-align: center;
+        margin-bottom: 25px;
+        position: absolute;
+        left: 1200px;
+        top: 100px;
+      }
+
+      .flagbox {
+        display: flex;
+        align-items: center;
+        margin-left: 50px;
+        margin-bottom: -25px;
+      }
+
+      #top5 {
+        margin-top: 50px;
+      }
+
+      .flag {
+        font-size: 5em;
+        margin-right: 25px;
+        margin-top: 20px;
+      }
+
+      .vaal {
+        font-weight: 600;
+        font-size: 2em;
+      }
+      #yrbars {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        left: 250px;
+        top: 10px;
+      }
+      .baar {
+        height: 2px;
+        background: yellow;
+        margin-bottom: 1px;
+        opacity: 0;
+        transition: 0.2s ease-in opacity;
+      }
+      #yrline {
+        position: absolute;
+        left: 249px;
+        height: 1005px;
+        top: 10px;
+        background: black;
+        width: 1px;
+      }
+      #yrlinelabel {
+        position: absolute;
+        text-align: right;
+        color: black;
+        left: 79px;
+        top: 5.5px;
+        display: flex;
+        font-family: 'Monaco';
+      }
+      #yrlinelabeldate {
+        font-weight: 800;
+        font-size: 1.4em;
+      }
+      #yrlineline {
+        margin-left: 20px;
+        margin-top: -30px;
+        display: flex;
+        align-items: center;
+      }
+      #yrlinelinecircle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: black;
+      }
+      #yrlinelineline {
+        width: 60px;
+        height: 2px;
+        background: black;
+      }
+      #margo {
+        margin-top: -10px;
+      }
+      #top5 {
+        position: absolute;
+        left: 1250px;
+        top: 100px;
+        font-size: 24px;
+      }
+      #title {
+        color: black;
+        padding: 4px 10px;
+        display: inline-block;
+        font-size: 42px;
+        font-weight: 900;
+      }
+      .toplist {
+        margin-top: 20px;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+
+  <body>
     <div id="yrcounter"></div>
-    <div id="yrwrapper">
-        <div id="top5"></div>
+    <div id="yrline"></div>
+    <div id="yrlinelabel">
+      <div id="margo">
+        <div id="yrlinelabeldate">Aug 14</div>
+        <div id="yrlinelabeltotal">347000</div>
+      </div>
+      <div id="yrlineline">
+        <div id="yrlinelinecircle"></div>
+        <div id="yrlinelineline"></div>
+      </div>
+    </div>
+    <div id="yrbars"></div>
+    <div id="top5"></div>
+    <div id="yrwrapper"></div>
+    <div id="top5">
+      <div id="title">Top 5 districts</div>
+      <div class="toplist"></div>
     </div>
     <div id="map"></div>
     <script src="d3.js"></script>
-    <script src="conf.js"></script>
+    <script src="2020.js"></script>
     <script src="d3geo.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
     <script src="topojson.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
-        let yrnow = 0;
-        let inc = 0.009;
-        let currFacet = null;
-        let valid_countries = facet["73"];
+      async function fetchFile() {
+        const json = await fetch('bundle-per.json');
+        const resp = await json.json();
+        window.myDistricts = resp;
+        // const cached = localStorage.getItem('mapdata2');
+        // if (cached) {
+        //   const parsed = JSON.parse(cached);
+        //   window.myDistricts = parsed;
+        // } else {
+        //   const url =
+        //     'https://api.covid19india.org/csv/latest/cowin_vaccine_data_districtwise.csv';
+        //   d3.text(url, (data) => {
+        //     var parsed = d3.csvParseRows(data);
+        //     const myDistricts = {};
+        //     parsed.forEach((v) => (myDistricts[v[5]] = 2));
+        //     window.myDistricts = myDistricts;
+        //     console.log(parsed);
+        //     localStorage.setItem('mapdata2', JSON.stringify(myDistricts));
+        //     alert('one');
+        //   });
+        // }
+      }
 
-        function map(n, start1, stop1, start2, stop2) {
-            return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
-        };
+      fetchFile();
 
-        function updateFacet() {
-            const prevyr = parseInt(yrnow);
-            const nxtyr = prevyr + 1;
-            if (yrnow > 73) yrnow = 73;
-            $("#yrcounter").html(moment("2020-01-30").add(yrnow, "days").format("DD MMM"))
-            $("#specific").html(moment("2020-01-30").add(yrnow, "days").format("hh:mm a"))
-            var color = d3
-                .scaleLinear()
-                .domain([0, 10, 400, 800])
-                .range(["#ddd", "#ff0", "#f92774", "#b21a03"]);
-            //TOP 5
-            const menow = {};
-            for (let cname in valid_countries) {
-                console.log(nxtyr, facet[nxtyr])
-                const valz = map(yrnow, prevyr, nxtyr, facet[prevyr][cname], facet[nxtyr][cname]);
-                menow[cname] = valz;
-            }
+      const file = 'districts.json';
+      var colorx = d3
+        .scaleLinear()
+        .domain([0, 200, 1500, 1800])
+        .range(['#ddd', '#ff0', '#f92774', '#b21a03']);
+      const alibi = Object.values(facet)
+        .map((v) => v.TT)
+        .map(
+          (v, i) =>
+            `<div class="baar baar-${i}" style="width: ${
+              v / 200
+            }px; background:${colorx(v / 40)}"></div>`
+        )
+        .join('');
+      $('#yrbars').html(alibi);
+      const vahya = {
+        'Andaman and Nicobar Islands': 'AN',
+        'Andhra Pradesh': 'AP',
+        'Arunachal Pradesh': 'AR',
+        Assam: 'AS',
+        Bihar: 'BR',
+        Chandigarh: 'CH',
+        Chhattisgarh: 'CT',
+        Delhi: 'DL',
+        'Dadra & Nagar Haveli': 'DN',
+        'Daman & Diu': 'DI',
+        Goa: 'GA',
+        Gujarat: 'GJ',
+        'Himachal Pradesh': 'HP',
+        Haryana: 'HR',
+        Jharkhand: 'JH',
+        'Jammu and Kashmir': 'JK',
+        Karnataka: 'KA',
+        Kerala: 'KL',
+        Ladakh: 'LA',
+        Maharashtra: 'MH',
+        Meghalaya: 'ML',
+        Manipur: 'MN',
+        'Madhya Pradesh': 'MP',
+        Mizoram: 'MZ',
+        Nagaland: 'NL',
+        Odisha: 'OR',
+        Punjab: 'PB',
+        Puducherry: 'PY',
+        Rajasthan: 'RJ',
+        Sikkim: 'SK',
+        Telangana: 'TG',
+        'Tamil Nadu': 'TN',
+        Tripura: 'TR',
+        TT: 'TT',
+        UN: 'UN',
+        'Uttar Pradesh': 'UP',
+        Uttarakhand: 'UT',
+        'West Bengal': 'WB',
+      };
 
-            // const top5 = Object.entries(menow).sort((b, a) => a[1] - b[1]).slice(0, 7);
-            // top5.push(["Pakistan", menow["Pakistan"]])
-            // top5.push(["India", menow["India"]])
-            // $("#top5").html("");
-            // for (let elem of top5) {
-            //     const kimo = kimoji.find(v => v.name === elem[0]);
-            //     $("#top5").append(`<div class="flagbox">
-            //   <div class="flag">${kimo && kimo.emoji}</div>
-            //   <div class="naambox">
-            //   <div class="naam">${elem[0]}</div>
-            //   <div class="vaal">${parseInt(elem[1])}</div>
-            //   </div>
-            //   </div>`)
-            // }
-            
-            d3.json("finsl.json", function(error, data) {
-                var svg = g
-                    .selectAll(".subunit")
-                    .data(topojson.feature(data, data.objects.polygons).features)
-                    // .transition()
-                    // .duration(700)
-                    .style("fill", function(d, i) {
-                        const cname = d.properties.st_nm;
-                        if (cname in menow) {
-                            return color(menow[cname]);
-                        } else {
-                            return "#ddd";
-                        }
-                    });
-            });
+      const revv = Object.assign(
+        {},
+        ...Object.entries(vahya).map(([a, b]) => ({ [b]: a }))
+      );
+
+      let yrnow = 0;
+      let inc = 0.04;
+      let currFacet = null;
+      let valid_countries = facet['73'];
+
+      function map(n, start1, stop1, start2, stop2) {
+        return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+      }
+
+      const adj = {
+        'Andaman and Nicobar Islands': { x: 0, y: 40, ex: true },
+        'Andhra Pradesh': { x: -30, y: 20, wrap: true },
+        'Arunachal Pradesh': { x: -8, r: -20, y: -8 },
+        Assam: { x: 0, y: -2, fs: 0.8 },
+        Bihar: { x: 5, y: 0, wrap: true },
+        Chandigarh: { x: 0, fs: 0.3, x: -8 },
+        Chhattisgarh: { x: 0, r: -60, y: -10 },
+        'Dadra & Nagar Haveli': { x: -20, fs: 0.6 },
+        'Daman & Diu': { x: 0 },
+        Delhi: { x: 20, wrap: true, align: 'start', fs: 0.6, y: 0 },
+        Goa: { x: -40, wrap: true, ex: true },
+        Gujarat: { x: 10, y: -15 },
+        Haryana: { x: 0, wrap: true, y: 0 },
+        'Himachal Pradesh': { x: 0, fs: 0.9, wrap: true },
+        'Jammu and Kashmir': { x: 0, fs: 1.4, wrap: true },
+        Jharkhand: { x: -15, y: 5, fs: 0.8, wrap: true },
+        Karnataka: { r: -45, y: 8, x: -20, align: 'start', fs: 1 },
+        Kerala: { x: -40, align: 'end', ex: true },
+        'Madhya Pradesh': { x: 0, y: 12, fs: 1.5 },
+        Maharashtra: { x: -20, y: -5, fs: 1.2 },
+        Manipur: { x: 50, align: 'start', ex: true },
+        Meghalaya: { x: 0, fs: 0.8, y: 0 },
+        Mizoram: { x: 0, y: 55, ex: true },
+        Nagaland: { x: 50, align: 'start', ex: true },
+        Odisha: { x: 5, y: -10, fs: 1.2 },
+        Puducherry: { align: 'start', x: 20, y: -10, ex: true, fs: 0.8 },
+        Punjab: { x: 0, wrap: true, y: 0 },
+        Rajasthan: { x: 0, y: -10, fs: 1.6 },
+        Sikkim: { x: 0, y: -35, ex: true },
+        'Tamil Nadu': { x: 0, y: -10, wrap: true, fs: 1 },
+        Telangana: { x: 0, y: 0 },
+        Tripura: { x: -5, align: 'end', y: 35, fs: 0.7, ex: true },
+        'Uttar Pradesh': { x: 0, fs: 1.5, y: 0, r: 20 },
+        Uttarakhand: { x: 0, wrap: true, fs: 0.9, y: 0 },
+        'West Bengal': { x: -5, y: 20, wrap: true },
+        Lakshadweep: { x: 0 },
+        Ladakh: { x: 0 },
+      };
+
+      function luminanace(r, g, b) {
+        var a = [r, g, b].map(function (v) {
+          v /= 255;
+          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        });
+        return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+      }
+
+      function contrast(rgb1, rgb2) {
+        // console.log(rgb1, rgb2);
+        var lum1 = luminanace(rgb1[0], rgb1[1], rgb1[2]);
+        var lum2 = luminanace(rgb2[0], rgb2[1], rgb2[2]);
+        var brightest = Math.max(lum1, lum2);
+        var darkest = Math.min(lum1, lum2);
+        return (brightest + 0.05) / (darkest + 0.05);
+      }
+
+      var color = d3
+        .scaleLinear()
+        .domain([1, 10, 20, 25])
+        .range(['#F5FAC3', '#6FBB73', '#1E7F43', '#03381b']);
+
+      function updateFacet() {
+        const facet = window.myDistricts;
+        const prevyr = parseInt(yrnow);
+        const nxtyr = prevyr + 1;
+        // if (yrnow > 335) yrnow = 335;
+        const nowdate = moment('2021-01-16')
+          .add(yrnow, 'days')
+          .format('DD MMM');
+        $('#title').html(nowdate);
+        // $('#yrlinelabeldate').html(nowdate);
+        // $('#specific').html(
+        //   moment('2020-01-30').add(yrnow, 'days').format('hh:mm a')
+        // );
+        // $('#yrlinelabel').css(
+        //   'transform',
+        //   `translateY(${1005 * (yrnow / 335)}px)`
+        // );
+        // $('#yrlinelabeltotal').html(
+        //   Math.floor(
+        //     map(yrnow, prevyr, nxtyr, facet[prevyr]['TT'], facet[nxtyr]['TT'])
+        //   )
+        // );
+        const nowww = facet[prevyr];
+        // if (Object.values(nowww).reduce((b, a) => b + a, 0) === 0) {
+        //   $('.toplist').html('No new cases registered');
+        // } else {
+        //   const top5 = Object.entries(nowww)
+        //     .sort((b, a) => a[1] - b[1])
+        //     .slice(0, 6)
+        //     .filter((v) => v[1] != 0 && v[0] != 'TT' && v[0] != 'UN')
+        //     .map(
+        //       ([n, v]) =>
+        //         `<div style="display:flex"><div style="min-width:180px">${revv[n]}</div><div>${v}</div></div>`
+        //     )
+        //     .join('');
+        //   $('.toplist').html(top5);
+        // }
+
+        // $('#yrline').css('height', 1005 * (yrnow / 335));
+        // $(`.baar-${nxtyr}`).css('opacity', 1);
+        const menow = {};
+        for (let cname in nowww) {
+          //   console.log(nxtyr, facet[nxtyr]);
+          const valz = map(
+            yrnow,
+            prevyr,
+            nxtyr,
+            facet[prevyr][cname],
+            facet[nxtyr][cname]
+          );
+          menow[cname] = valz;
         }
+        // window.menow = menow;
+        d3.json(file, function (error, data) {
+          var svg = g
+            .selectAll('.subunit')
+            .data(topojson.feature(data, data.objects.districts).features)
+            .style('fill', function (d, i) {
+              const dname = d.properties.district;
+              const v = menow[dname];
+              if (v < 1) return '#ddd';
+              if (v < 5) return '#ffffcc';
+              if (v < 10) return '#e1fa55';
+              if (v < 15) return '#7fcdbb';
+              if (v < 20) return '#41b6c4';
+              if (v < 25) return '#2c7fb8';
+              if (v < 30) return '#253594';
+              if (v < 35) return '#7405ca';
+              if (v < 40) return '#bf00d6';
+              if (v < 45) return '#d60088';
+              if (v < 50) return '#cc0024';
+              if (v > 50) return '#ff3000';
 
-
-        var width = window.innerWidth,
-            height = window.innerHeight;
-
-        var projection = d3.geoMercator();
-
-        var path = d3
-            .geoPath()
-            .projection(projection)
-            .pointRadius(2);
-
-        var svg = d3
-            .select("#map")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        var g = svg.append("g");
-
-        d3.json("finsl.json", function(error, data) {
-            centerZoom(data);
-            var subunits = drawSubUnits(data);
-            // colorSubunits(subunits);
-            // drawSubUnitLabels(data);
-            // drawPlaces(data);
-            // drawOuterBoundary(data, boundary);
+              // if (dname in menow) {
+              //   return color(menow[dname]);
+              // }
+              return '#ddd';
+            });
         });
 
-        function centerZoom(data) {
-            var o = topojson.mesh(data, data.objects.polygons, function(a, b) {
-                return a === b;
-            });
+        // d3.json(file, function (error, data) {
+        //   var svg = g
+        //     .selectAll('.subunit-label')
+        //     .data(topojson.feature(data, data.objects.districts).features)
+        //     .text(function (d, i) {
+        //       const cname = vahya[d.properties.st_nm];
+        //       return Math.ceil(menow[cname]) || '';
+        //     })
+        //     .style('fill', (d) => {
+        //       const cname = vahya[d.properties.st_nm];
+        //       if (!adj[d.properties.st_nm]) console.log(d.properties.st_nm);
+        //       if (adj[d.properties.st_nm].ex) return '#000';
+        //       const mew = cname === 'DL' ? 'UP' : cname;
+        //       const myCol = mew in menow ? color(menow[mew]) : 'rgb(0,0,0)';
+        //       const myColArr = myCol
+        //         .substring(4, myCol.length - 1)
+        //         .replace(/ /g, '')
+        //         .split(',');
+        //       //   console.log(myCol, myColArr, 'ff');
+        //       const whiteContrast = contrast([255, 255, 255], myColArr);
+        //       const blackContrast = contrast([0, 0, 0], myColArr);
+        //       //   console.log(elem, 'wc', whiteContrast, 'bc', blackContrast);
+        //       return whiteContrast + 4 > blackContrast ? '#fff' : '#000';
+        //     });
+        // });
+      }
 
-            projection.scale(1).translate([0, 0]);
+      var width = window.innerWidth,
+        height = window.innerHeight;
 
-            var b = path.bounds(o),
+      var projection = d3.geoMercator();
+
+      var path = d3.geoPath().projection(projection).pointRadius(2);
+
+      var svg = d3
+        .select('#map')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+
+      var g = svg.append('g');
+
+      d3.json(file, function (error, data) {
+        centerZoom(data);
+        var subunits = drawSubUnits(data);
+        // colorSubunits(subunits);
+        drawSubUnitLabels(data);
+        // drawPlaces(data);
+        // drawOuterBoundary(data, boundary);
+      });
+
+      function centerZoom(data) {
+        var o = topojson.mesh(data, data.objects.districts, function (a, b) {
+          return a === b;
+        });
+
+        projection.scale(1).translate([0, 0]);
+
+        var b = path.bounds(o),
           s =
             1 /
             Math.max(
               (b[1][0] - b[0][0]) / width,
-              ((b[1][1] - b[0][1]) / height) * 1.1
+              ((b[1][1] - b[0][1]) / height) * 1.04
             ),
           t = [
-            (width - s * (b[1][0] + b[0][0])) / 2,
-            (height - s * (b[1][1] + b[0][1])) * 0.5
+            (width - s * (b[1][0] + b[0][0])) * 0.41,
+            (height - s * (b[1][1] + b[0][1])) * 0.5,
           ];
 
-            var p = projection.scale(s).translate(t);
+        var p = projection.scale(s).translate(t);
 
-            return o;
-        }
+        return o;
+      }
 
-        function drawOuterBoundary(data, boundary) {
-            g.append("path")
-                .datum(boundary)
-                .attr("d", path)
-                .attr("class", "subunit-boundary")
-                .attr("fill", "none")
-                .attr("stroke", "#3a403d");
-        }
+      function drawOuterBoundary(data, boundary) {
+        g.append('path')
+          .datum(boundary)
+          .attr('d', path)
+          .attr('class', 'subunit-boundary')
+          .attr('fill', 'none')
+          .attr('stroke', '#3a403d');
+      }
 
-        function drawPlaces(data) {
-            g.append("path")
-                .datum(topojson.feature(data, data.objects.places))
-                .attr("d", path)
-                .attr("class", "place");
+      function drawSubUnits(data) {
+        var subunits = g
+          .selectAll('.subunit')
+          .data(topojson.feature(data, data.objects.districts).features)
+          .enter()
+          .append('path')
+          .attr('class', 'subunit')
+          .attr('d', path)
+          .style('stroke', '#999')
+          .style('fill', '#ccc')
+          .style('stroke-width', '1px');
 
-            g.selectAll(".place-label")
-                .data(topojson.feature(data, data.objects.places).features)
-                .enter()
-                .append("text")
-                .attr("class", "place-label")
-                .attr("transform", function(d) {
-                    return "translate(" + projection(d.geometry.coordinates) + ")";
-                })
-                .attr("dy", ".35em")
-                .attr("x", 6)
-                .attr("text-anchor", "start")
-                .style("font-size", ".7em")
-                .style("text-shadow", "0px 0px 2px #fff")
-                .text(function(d) {
-                    return d.properties.name;
-                });
-        }
+        var subunitsWrapper = g
+          .selectAll('.subunit2')
+          .data(topojson.feature(data, data.objects.states).features)
+          .enter()
+          .append('path')
+          .attr('class', 'subunit2')
+          .attr('d', path)
+          .style('stroke', '#000')
+          .style('fill', 'transparent')
+          .style('stroke-width', '2px');
 
-        function drawSubUnits(data) {
-            var subunits = g
-                .selectAll(".subunit")
-                .data(topojson.feature(data, data.objects.polygons).features)
-                .enter()
-                .append("path")
-                .attr("class", "subunit")
-                .attr("d", path)
-                .style("stroke", "#333")
-                .style("stroke-width", "1px");
+        // g.append('path')
+        //   .datum(
+        //     topojson.mesh(data, data.objects.states, function (a, b) {
+        //       return a !== b;
+        //     })
+        //   )
+        //   .attr('d', path)
+        //   .style('stroke', '#f00');
 
-            return subunits;
-        }
+        return subunits;
+      }
 
-        function drawSubUnitLabels(data) {
-            g.selectAll(".subunit-label")
-                .data(topojson.feature(data, data.objects.polygons).features)
-                .enter()
-                .append("text")
-                .attr("class", "subunit-label")
-                .attr("transform", function(d) {
-                    return "translate(" + path.centroid(d) + ")";
-                })
-                .attr("dy", ".35em")
-                .attr("text-anchor", "middle")
-                .style("font-size", ".5em")
-                .style("text-shadow", "0px 0px 2px #fff")
-                .style("text-transform", "uppercase")
-                .text(function(d) {
-                    return d.properties.name;
-                });
-        }
+      function drawSubUnitLabels(data) {
+        g.selectAll('.subunit-label')
+          .data(topojson.feature(data, data.objects.districts).features)
+          .enter()
+          .append('text')
+          .attr('class', 'subunit-label')
+          .attr('transform', function (d) {
+            const name = d.properties.st_nm;
+            const adjC = adj[name];
+            const [locx, locy] = path.centroid(d);
+            const fin = [locx + adjC.x, locy + (adjC.y || 0)];
+            return 'translate(' + fin + ')';
+          })
+          .attr('dy', '.35em')
+          .attr('text-anchor', 'middle')
+          .style('font-size', function (d) {
+            const name = d.properties.st_nm;
+            const adjC = adj[name];
+            return `${0.9 * adjC.fs || 0.9}em`;
+          })
+          .style('fill', (d) => '#000')
+          .style('text-transform', 'uppercase')
+          .text(function (d) {
+            return d.properties.st_nm;
+          });
+      }
 
-        function colorSubunits(subunits) {
-            var c = d3.scaleOrdinal(d3.schemeCategory20);
-            subunits
-                .style("fill", function(d, i) {
-                    return c(i);
-                })
-                .style("opacity", ".6");
-        }
-        setInterval(() => {
-            yrnow += inc;
+      function colorSubunits(subunits) {
+        // var c = d3.scaleOrdinal(d3.schemeCategory20);
+        // subunits
+        //   .style('fill', function (d, i) {
+        //     return c(i);
+        //   })
+        //   .style('opacity', '.6');
+      }
+      const timer = setInterval(() => {
+        if (yrnow > 152) clearInterval(timer);
+        else {
+          yrnow += inc;
+
+          if (window.myDistricts) {
             updateFacet();
-        }, 50)
+            //clearInterval(timer);
+          }
+        }
+      }, 100);
     </script>
-</body>
-
+  </body>
 </html>
